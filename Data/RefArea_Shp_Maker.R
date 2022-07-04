@@ -1,4 +1,4 @@
-#Script to build shapefiles for Reference areas (both projected and back-projected)
+#Script to build shapefiles for Reference areas (both projected and back-projected) #Needs update to match CCAMLRGIS v4
 library(CCAMLRGIS)
 library(sp)
 library(rgeos)

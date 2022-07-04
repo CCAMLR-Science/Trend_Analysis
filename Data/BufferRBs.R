@@ -1,4 +1,4 @@
-#Script to buffer RBs properly
+#Script to buffer RBs properly #Needs update to match CCAMLRGIS v4
 library(CCAMLRGIS)
 library(rgeos)
 setwd('I:/Science/Projects/Research Block Biomass Estimates/ResearchBlockBiomass/Data')

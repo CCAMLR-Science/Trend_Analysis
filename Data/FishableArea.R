@@ -1,4 +1,4 @@
-#Script to compute fishable areas
+#Script to compute fishable areas #Needs update to match CCAMLRGIS v4
 library(CCAMLRGIS)
 library(rgdal)
 library(terra) #Package used to handle the GEBCO data
