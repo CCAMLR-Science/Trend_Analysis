@@ -3,6 +3,9 @@
 
 # Trend analysis
 
+Latest report:
+[WG-SAM-2022/08](https://meetings.ccamlr.org/en/wg-sam-2022/08)
+
 ## Annual updates
 
 There are several things to update annually. Some things might just need
