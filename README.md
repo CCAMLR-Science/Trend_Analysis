@@ -57,3 +57,7 @@ Commission, contact the authors (might as well do it during FSA) and ask
 them for these values. They go in the script *00_RunAnalysis.R*, under
 “\#Set biomass and CV for Reference Areas”. Record these values also in
 *01_LoadData.R* for posterity.
+
+## How to run the analysis
+
+Simply run “00_RunAnalysis.R”, it will source all other scripts.
