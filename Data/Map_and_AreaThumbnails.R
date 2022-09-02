@@ -33,6 +33,21 @@ Bm=terra::mask(B, vect(pol))
 #Get labels
 Labs=read.csv("Data/LabelsRBs.csv")
 
+
+#Separate RBs that require catch advice from those that don't
+#List RBs that require catch advice
+RBsCAdv=c("486_2","486_3","486_4","486_5",
+          "5841_1","5841_2","5841_3","5841_4","5841_5","5841_6",
+          "5842_1","5842_2",
+          "882_1","882_2","882_3","882_4","882H",
+          "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10")
+
+RBsY=RBs%>%filter(name%in%RBsCAdv)
+RBs=RBs%>%filter(!name%in%RBsCAdv)
+
+LabsY=Labs%>%filter(text%in%RBsCAdv)
+Labs=Labs%>%filter(!text%in%RBsCAdv)
+
 Dcuts=c(-15000,-1800,-600,0,10000)
 Dcols=c('grey90','green','grey90','white')
 
@@ -47,6 +62,7 @@ plot(st_geometry(Coast[Coast$ID=='All',]),add=T,col='grey70',border='grey50',lwd
 add_RefGrid(bb=st_bbox(ASDs),ResLat=10,ResLon=20,LabLon=0,offset = 1,lwd=1,fontsize = 0.9)
 
 plot(st_geometry(RBs),add=T,lwd=2,border='red')
+plot(st_geometry(RBsY),add=T,lwd=2,border='blue')
 plot(st_geometry(RA),add=T,lwd=2,border=rgb(1,0.5,0,0.5),col=rgb(1,0.5,0,0.4))
 
 # add_Cscale(height=60,maxVal=-1,offset = -1300,fontsize=1,width=15,lwd=2,
@@ -54,6 +70,7 @@ plot(st_geometry(RA),add=T,lwd=2,border=rgb(1,0.5,0,0.5),col=rgb(1,0.5,0,0.4))
 #            cols = Depth_cols2)
 
 text(Labs$x,Labs$y,Labs$text,cex=1,col='darkred',font=2)
+text(LabsY$x,LabsY$y,LabsY$text,cex=1,col='darkblue',font=2)
 text(-290000,-2950000,"RSR Open",cex=1.3,col='black',font=2)
 text(3900000,1050000,"HIMI",cex=1.3,col='black',font=2)
 

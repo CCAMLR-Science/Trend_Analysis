@@ -312,7 +312,7 @@ rm(T_Rels,T_Recs,T_Links,T_Catch)
 #Find releases that have been recaptured elsewhere and are therefore not available for recapture
 Migrants=Links%>%filter(RESEARCH_BLOCK_CODE_RELEASE!=RESEARCH_BLOCK_CODE_RECAPTURE)
 RelEm=Rels%>%filter(obs_haul_tag_release_id%in%Migrants$obs_haul_tag_release_id)
-RelEm=summarise(group_by(RelEm,RESEARCH_BLOCK_CODE),n=n())
+RelEm=dplyr::summarise(group_by(RelEm,RESEARCH_BLOCK_CODE),n=n())
 #Report on releases that are removed for Chapman estimates (after CPUE estimates, in EstimateBiomass.R)
 message("Releases that emigrated and will be excluded from Chapman estimates:")
 for(i in seq(1,nrow(RelEm))){message(paste(RelEm[i,],collapse = ": "))}
