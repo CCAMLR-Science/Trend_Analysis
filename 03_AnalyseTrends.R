@@ -182,8 +182,12 @@ for(r in rbs){
     }
   }
   
-  #CPUE
   plot(NA,NA,xlim=XL,ylim=YL,axes=F,xlab='',ylab='')
+
+  if(r%in%RBsCAdv){
+    rect(xleft=XL[1]-1, ybottom=YL[1]-10000, xright=XL[2]+1, ytop=YL[2]+10000,col='grey85',border=NA)
+  } 
+  #CPUE
   PlotVar(Input=tmp_cp[,c("Season","CI_lower","CI_upper")],Col=rgb(0,0,1,0.25))
   par(new=T)
   
@@ -341,7 +345,6 @@ trends=dplyr::left_join(trends,CLs,by="RB")
 
 #Potential CLs
 trends$B004=round(trends$B_tonnes*0.04)
-# trends$B004[which(trends$Sufficent_recaps=='N' & trends$CPUE_Trend_D=='Y')]=NA #Remove these, Biomass was added per Member request
 trends$CL08=round(trends$CL*0.8)
 trends$CL12=round(trends$CL*1.2)
 
@@ -370,6 +373,10 @@ trends$Rec_CLs[indx]=trends$CL08[indx]
 #Without CPUE trend decline:
 indx=which(trends$Trend_Decision=='ISU' & trends$Sufficent_recaps=='N' & trends$CPUE_Trend_D=='N')
 trends$Rec_CLs[indx]=pmin(trends$CL12[indx],pmax(trends$CL08[indx],trends$B004[indx]))
+#FSA22: data only in the last of 5 years:
+indx=which(trends$CPUE_lastS==Est_Season & trends$CPUE_nyrs==1)
+# trends$Rec_CLs[indx]=pmin(trends$CL12[indx],pmax(trends$CL08[indx],trends$B004[indx]))
+trends$Rec_CLs[indx]=trends$B004[indx]
 
 
 #Format table
@@ -411,14 +418,20 @@ trends$Rec_CLs[indx]="x"
 #Mark CLs that were derived from previous season
 trends$stars[is.na(trends$stars)]=""
 trends$CL=paste0(trends$CL,trends$stars)
-#Fill in those with data only in the last year
+#Fill in those with data only in the last year (FSA22)
 indx=which(trends$CPUE_lastS==Est_Season & trends$CPUE_nyrs==1)
 trends$Trend_Decision[indx]="[]"
 trends$CPUE_Trend_D[indx]="[]"
-trends$Rec_CLs[indx]="[]"
+# trends$Rec_CLs[indx]="[]"
+
+
 
 #Keep columns of interest
 trends=trends[,c("Area","ASD","RB","Species","CL","Trend_Decision","Sufficent_recaps","CPUE_Trend_D","B_tonnes","B004","CL08","CL12","Rec_CLs")]
+
+#Add column to mark RBs that require catch advice
+trends$Cadv="N"
+trends$Cadv[trends$RB%in%RBsCAdv]="Y"
 
 #Add footnote
 trends[nrow(trends)+1,1]=foot
@@ -437,7 +450,8 @@ colnames(trends)=c(
   "Bx0.04",
   "PCLx0.8",
   "PCLx1.2",
-  paste0("Recommended CL for ",Est_Season+1)
+  paste0("Recommended CL for ",Est_Season+1),
+  "Cadv"
 )
 write.csv(trends, paste0("Trends_",Est_Season,"_and_CLs_",Time,".csv"),row.names=F)
 
@@ -459,27 +473,61 @@ save_png <- function(plot, path){
 
 RB=trends
 if(any(is.na(RB$`Trend decision`))){stop('Trend decision missing')}
+if(any(is.na(RB$Cadv))){stop('Catch advice Y/N missing')}
 
+#Yes advice
 #Declining:
-tmp=RB[RB$`Trend decision`=='D',]
+tmp=RB[RB$`Trend decision`=='D' & RB$Cadv=="Y",]
 txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
 D=paste(txt$rbs,collapse='\n')
 #Chapman
-tmp=RB[RB$`Trend decision`=='ISU' & RB$`Adequate recaptures`=='Y',]
+tmp=RB[RB$`Trend decision`=='ISU' & RB$`Adequate recaptures`=='Y' & RB$Cadv=="Y",]
 txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
 Chap=paste(txt$rbs,collapse='\n')
 #CPUE
-tmp=RB[RB$`Trend decision`=='ISU' & RB$`Adequate recaptures`=='N' & RB$`CPUE Trend Decline`=='N',]
+tmp=RB[RB$`Trend decision`=='ISU' & RB$`Adequate recaptures`=='N' & RB$`CPUE Trend Decline`=='N' & RB$Cadv=="Y",]
 txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
 Cpue=paste(txt$rbs,collapse='\n')
 #Cpue decline
-tmp=RB[RB$`Trend decision`=='ISU' & RB$`Adequate recaptures`=='N' & RB$`CPUE Trend Decline`=='Y',]
+tmp=RB[RB$`Trend decision`=='ISU' & RB$`Adequate recaptures`=='N' & RB$`CPUE Trend Decline`=='Y' & RB$Cadv=="Y",]
 txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
 ISUd=paste(txt$rbs,collapse='\n')
 #No fishing in last season
-tmp=RB[RB$`Trend decision`=='-',]
+tmp=RB[RB$`Trend decision`=='-' & RB$Cadv=="Y",]
 txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
 NoF=paste(txt$rbs,collapse='\n')
+#Fishing only in last season
+tmp=RB[RB$`Trend decision`=='[]' & RB$Cadv=="Y",]
+txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
+FLS=paste(txt$rbs,collapse='\n')
+
+
+#No advice
+#Declining:
+tmp=RB[RB$`Trend decision`=='D' & RB$Cadv=="N",]
+txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
+D_N=paste(txt$rbs,collapse='\n')
+#Chapman
+tmp=RB[RB$`Trend decision`=='ISU' & RB$`Adequate recaptures`=='Y' & RB$Cadv=="N",]
+txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
+Chap_N=paste(txt$rbs,collapse='\n')
+#CPUE
+tmp=RB[RB$`Trend decision`=='ISU' & RB$`Adequate recaptures`=='N' & RB$`CPUE Trend Decline`=='N' & RB$Cadv=="N",]
+txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
+Cpue_N=paste(txt$rbs,collapse='\n')
+#Cpue decline
+tmp=RB[RB$`Trend decision`=='ISU' & RB$`Adequate recaptures`=='N' & RB$`CPUE Trend Decline`=='Y' & RB$Cadv=="N",]
+txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
+ISUd_N=paste(txt$rbs,collapse='\n')
+#No fishing in last season
+tmp=RB[RB$`Trend decision`=='-' & RB$Cadv=="N",]
+txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
+NoF_N=paste(txt$rbs,collapse='\n')
+#Fishing only in last season
+tmp=RB[RB$`Trend decision`=='[]' & RB$Cadv=="N",]
+txt=dplyr::summarise(group_by(tmp,`Subarea or Division`),rbs=paste(`Research Block`,collapse=', '))
+FLS_N=paste(txt$rbs,collapse='\n')
+
 
 Diag=grViz("
 digraph boxes_and_circles{
@@ -489,6 +537,20 @@ A0[label =
     <
     Fishing in the last Season?<br/>
     <font point-size = '12'>(Option limited to the last 5 years)</font>
+    >
+]
+
+node [shape = box,color=black,penwidth = 1.5,fontname =arial]
+A00[label =
+    <
+    Fishing only in the last Season?
+    >
+]
+
+node [shape = box,color=black]
+A000[label = 
+    <
+    CPUE B estimate &#215; 0.04
     >
 ]
 
@@ -577,6 +639,8 @@ node [shape = oval,color=grey]
 ISUd [label='@@4']
 node [shape = oval,color=grey]
 NoF [label='@@5']
+node [shape = oval,color=grey]
+FLS [label='@@6']
 
 A->B1
 B1->B2
@@ -584,8 +648,12 @@ B1->B2
 A->C1
 C1->C2
 
-A0->A [label='Y', fontsize=20]
+A0->A00 [label='Y', fontsize=20]
 A0->A1 [label='N', fontsize=20]
+
+A00->A [label='N', fontsize=20]
+A00->A000 [label='Y', fontsize=20]
+
 C2->E [label='Y', fontsize=20]
 C2->D1 [label='N', fontsize=20]
 D1->D2 [label='Y', fontsize=20]
@@ -596,6 +664,7 @@ E->Chap [arrowhead=none,color=grey]
 D3->Cpue [arrowhead=none,color=grey]
 D2->ISUd [arrowhead=none,color=grey,length=0]
 A1->NoF [arrowhead=none,color=grey]
+A000->FLS [arrowhead=none,color=grey]
 
 graph[nodesep=1]
 } 
@@ -604,7 +673,7 @@ graph[nodesep=1]
 [3]: Cpue
 [4]: ISUd
 [5]: NoF
-
+[6]: FLS
 ",width=1000,height=1000)
 
 

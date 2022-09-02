@@ -7,7 +7,7 @@
 #Timestamp to be added to file names
 Time=Sys.time() 
 Time=format(Time,"%d-%b-%Y")
-Time=paste0(Time,"_V2") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
+# Time=paste0(Time,"_V2") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
 #V1: using FishableArea2020
 #V2: using FishableArea2021
 
@@ -35,6 +35,13 @@ RBsToDo=c("481_1","481_2","481_3","482_N","482_S",
           "5844b_1","5844b_2",
           "882_1","882_2","882_3","882_4","882H",
           "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10")
+#List RBs that require catch advice
+RBsCAdv=c("486_2","486_3","486_4","486_5",
+          "5841_1","5841_2","5841_3","5841_4","5841_5","5841_6",
+          "5842_1","5842_2",
+          "882_1","882_2","882_3","882_4","882H",
+          "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10")
+
 #Compare to GIS database
 RBcheck=CCAMLRGIS::load_RBs()
 if(all(RBsToDo%in%c(RBcheck$GAR_Short_Label,"882H"))==F){stop("Missing RB in RBsToDo")}
