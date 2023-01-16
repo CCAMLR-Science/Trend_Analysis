@@ -455,6 +455,13 @@ colnames(trends)=c(
 )
 write.csv(trends, paste0("Trends_",Est_Season,"_and_CLs_",Time,".csv"),row.names=F)
 
+
+#Comment/uncomment below to work on the diagram
+Est_Season=2022
+Time="12-Sep-2022"
+trends=read.csv(paste0("Trends_",Est_Season,"_and_CLs_",Time,".csv"),check.names = F)
+
+
 #Remove footnote
 trends=trends[-nrow(trends),]
 
@@ -535,7 +542,7 @@ digraph boxes_and_circles{
 node [shape = box,color=black,penwidth = 1.5,fontname =arial]
 A0[label =
     <
-    Fishing in the last Season?<br/>
+    Fishing in the most recent season?<br/>
     <font point-size = '12'>(Option limited to the last 5 years)</font>
     >
 ]
@@ -543,7 +550,7 @@ A0[label =
 node [shape = box,color=black,penwidth = 1.5,fontname =arial]
 A00[label =
     <
-    Fishing only in the last Season?
+    Fishing only in the most recent season?
     >
 ]
 
@@ -557,14 +564,14 @@ A000[label =
 node [shape = box,color=black,penwidth = 1.5,fontname =arial]
 A[label = 
     <
-    Biomass estimate trend evaluation
+    Biomass estimates trend evaluation
     >
 ]
 
 node [shape = box, color=black]
 A1[label =
     <
-    Previous Catch Limit
+    Previous catch limit
     >
 ]
 
@@ -578,7 +585,7 @@ B1[label =
 node [shape = box, color=black]
 B2[label = 
     <
-    Previous Catch Limit &#215; 0.8
+    Previous catch limit &#215; 0.8
     >
 ]
 
@@ -600,14 +607,14 @@ C2[label =
 node [shape = box,color=black]
 D1[label = 
     <
-    CPUE Trend Decline 
+    CPUE trend decline 
     >
 ]
 
 node [shape = box,color=black]
 D2[label = 
     <
-    Previous Catch Limit &#215; 0.8
+    Previous catch limit &#215; 0.8
     >
 ]
 
@@ -616,8 +623,8 @@ D3[label =
     <
     CPUE B estimate &#215; 0.04<br/>
 <font point-size = '12'>Change limited to</font><br/>
-<font point-size = '12'>Previous Catch Limit &#215; 0.8</font><br/>
-<font point-size = '12'>Previous Catch Limit &#215; 1.2</font><br/>>
+<font point-size = '12'>Previous catch limit &#215; 0.8</font><br/>
+<font point-size = '12'>Previous catch limit &#215; 1.2</font><br/>>
 ]
 
 node [shape = box,color=black]
@@ -625,8 +632,8 @@ E[label =
     <
     Chapman B estimate &#215; 0.04<br/>
 <font point-size = '12'>Change limited to</font><br/>
-<font point-size = '12'>Previous Catch Limit &#215; 0.8</font><br/>
-<font point-size = '12'>Previous Catch Limit &#215; 1.2</font><br/>>
+<font point-size = '12'>Previous catch limit &#215; 0.8</font><br/>
+<font point-size = '12'>Previous catch limit &#215; 1.2</font><br/>>
 ]
 
 node [shape = oval,color=grey]
@@ -674,7 +681,7 @@ graph[nodesep=1]
 [4]: ISUd
 [5]: NoF
 [6]: FLS
-",width=1000,height=1000)
+",width=1500,height=1500)
 
 
 save_png(Diag,paste0("Diagram_",Est_Season,"_",Time,".png"))
