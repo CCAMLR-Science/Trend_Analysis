@@ -5,8 +5,8 @@ library(dplyr)
 ASDs=load_ASDs()
 RBs=load_RBs()
 SSRUs=load_SSRUs()
-#Get Bathy
-B=rast("I:/Science/Projects/GEBCO/2021/Processed/GEBCO2021_500.tif")
+#Get Bathy (! UP TO DATE)
+B=rast("I:/Science/Projects/GEBCO/2022/Processed/GEBCO2022_500.tif")
 
 
 
@@ -55,7 +55,7 @@ png(filename = 'Data/Map_TrendAnalysis.png', width = 2000, height = 1900, units 
     bg = "white", res = 200)
 par(mai=c(0,0,0,0),xaxs='i',yaxs='i')
 
-plot(Bm,breaks=Dcuts,col=Dcols,legend=FALSE,axes=FALSE,xlim=c(-4.2e6,4.8e6),ylim=c(-4.2e6,4.4e6),xpd=T)
+plot(Bm,breaks=Dcuts,col=Dcols,legend=FALSE,axes=FALSE,xlim=c(-4.8e6,4.8e6),ylim=c(-4.5e6,4.5e6),xpd=T)
 plot(st_geometry(ASDs),add=T,lwd=2,border="grey20",xpd=T)
 
 plot(st_geometry(Coast[Coast$ID=='All',]),add=T,col='grey70',border='grey50',lwd=0.5)
@@ -64,10 +64,6 @@ add_RefGrid(bb=st_bbox(ASDs),ResLat=10,ResLon=20,LabLon=0,offset = 1,lwd=1,fonts
 plot(st_geometry(RBs),add=T,lwd=2,border='red')
 plot(st_geometry(RBsY),add=T,lwd=2,border='blue')
 plot(st_geometry(RA),add=T,lwd=2,border=rgb(1,0.5,0,0.5),col=rgb(1,0.5,0,0.4))
-
-# add_Cscale(height=60,maxVal=-1,offset = -1300,fontsize=1,width=15,lwd=2,
-#            cuts = Depth_cuts2,
-#            cols = Depth_cols2)
 
 text(Labs$x,Labs$y,Labs$text,cex=1,col='darkred',font=2)
 text(LabsY$x,LabsY$y,LabsY$text,cex=1,col='darkblue',font=2)

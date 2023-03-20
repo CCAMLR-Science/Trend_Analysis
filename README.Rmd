@@ -33,7 +33,7 @@ In the subfolder *~/Data*, the shapefiles "RefAreas" and "RefAreasLL" contain th
 
 3. Review/update Fishable areas. 
 
-In the subfolder *~/Data*, the csv file "FishableAreaYYYY.csv" contains the fishable area of RBs and Reference Areas. It is generated using *FishableArea.R*. This needs to be updated when those areas are updated and/or when the GEBCO bathymetry is updated. If fishable areas have been updated, the effect of the update must be analyzed.
+In the subfolder *~/Data*, the csv file "FishableAreaYYYY.csv" contains the fishable area of RBs and Reference Areas. It is generated using *FishableArea.R*. This needs to be updated when those areas are updated and/or when the GEBCO bathymetry is updated. If fishable areas have been updated, the effect of the update must be analyzed (and run *CompareGEBCOs.R*).
 
 4. Review/update Map and Area Thumbnails. 
 
@@ -41,7 +41,7 @@ In the subfolder *~/Data*, the images *Map_TrendAnalysis.png*, *Area48.png*, *Ar
 
 5. Update past catch limits.
 
-Every year new catch limits are agrred upon. Record the previous catch limits in the file *CLs.csv* by adding a column every year. If a new RB is created, add a row for it.
+Every year new catch limits are agreed upon. Record the previous catch limits in the file *CLs.csv* by adding a column every year. If a new RB is created, add a row for it.
 
 6. Review/update vulnerable biomass estimates
 

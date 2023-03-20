@@ -40,7 +40,8 @@ In the subfolder *\~/Data*, the csv file “FishableAreaYYYY.csv” contains
 the fishable area of RBs and Reference Areas. It is generated using
 *FishableArea.R*. This needs to be updated when those areas are updated
 and/or when the GEBCO bathymetry is updated. If fishable areas have been
-updated, the effect of the update must be analyzed.
+updated, the effect of the update must be analyzed (and run
+*CompareGEBCOs.R*).
 
 4.  Review/update Map and Area Thumbnails.
 
@@ -51,7 +52,7 @@ trend plots, and may be updated in that script, if needed.
 
 5.  Update past catch limits.
 
-Every year new catch limits are agrred upon. Record the previous catch
+Every year new catch limits are agreed upon. Record the previous catch
 limits in the file *CLs.csv* by adding a column every year. If a new RB
 is created, add a row for it.
 

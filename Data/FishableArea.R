@@ -1,23 +1,25 @@
-#Script to compute fishable areas #Needs update to match CCAMLRGIS v4
+#Script to compute fishable areas 
 library(CCAMLRGIS)
-library(rgdal)
 library(terra) #Package used to handle the GEBCO data
 
 #Load research blocks
 RBs=load_RBs()
 #Load SSRUs (to get 882H)
 SSRUs=load_SSRUs()
+SSRUs=SSRUs[SSRUs$GAR_Short_Label=='882H',]
 #simplify RBs and SSRUs and merge
-RBs@data=data.frame(name=as.character(RBs$GAR_Short_Label))
-SSRUs@data=data.frame(name=as.character(SSRUs$GAR_Short_Label))
-SSRUs=SSRUs[SSRUs$name=="882H",]
+RBs=RBs%>%select(name=GAR_Short_Label)
+SSRUs=SSRUs%>%select(name=GAR_Short_Label)
+#Bind
 Polys=rbind(RBs,SSRUs)
+
 #back-Project Polys to Latitudes/Longitudes
-PolysLL=sp::spTransform(Polys,CRS("+init=epsg:4326"))
+PolysLL=st_transform(Polys,crs=4326)
 
 
 #Load reference areas (created in RefArea_Shp_Maker.R)
-RefAreas=readOGR(dsn=path.expand(paste0(getwd(),'/Data')), layer="RefAreasLL",verbose=F)
+RefAreas=st_read(dsn=path.expand(paste0(getwd(),'/Data')), layer="RefAreasLL", quiet = TRUE)
+
 #Add RefAreas to PolysLL
 PolysLL=rbind(PolysLL,RefAreas)
 
@@ -26,7 +28,7 @@ PolysLL=rbind(PolysLL,RefAreas)
 
 
 #Get the unprojected GEBCO data
-B=rast("I:/Science/Projects/GEBCO/2021/Processed/GEBCO2021_LL.tif")
+B=rast("I:/Science/Projects/GEBCO/2022/Processed/GEBCO2022_LL.tif")
 #Convert Polys to Spatvector for the terra package
 PolysLLsv=vect(PolysLL)
 #Loop over polygons that are inside PolysLLsv
@@ -57,4 +59,4 @@ RawAr=rbind(RawAr,data.frame(
 RawAr=RawAr[-which(RawAr$Poly%in%c("RSR_open_East","RSR_open_West")),]
 colnames(RawAr)=c("Polys","Fishable_area")
 #Export
-write.csv(RawAr,'Data/FishableArea2021.csv',row.names = F)
+write.csv(RawAr,'Data/FishableArea2022.csv',row.names = F)
