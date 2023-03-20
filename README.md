@@ -10,7 +10,8 @@ Latest report:
 
 Before starting an update, make sure all changes have been pushed and
 that the current branch has been merged with the main. Then create a new
-branch in Rstudio, on per meeting, *e.g.* SAM23 then FSA23.
+branch in Rstudio, one per meeting, *e.g.* SAM23 then FSA23 and work on
+these branches separately.
 
 There are several things to update annually. Some things might just need
 to be reviewed, others might need updating.
