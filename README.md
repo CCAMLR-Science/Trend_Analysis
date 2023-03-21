@@ -54,7 +54,8 @@ trend plots, and may be updated in that script, if needed.
 
 Every year new catch limits are agreed upon. Record the previous catch
 limits in the file *CLs.csv* by adding a column every year. If a new RB
-is created, add a row for it.
+is created, add a row for it. Use the *GetCLs* script (only once a
+year), but always double check with the SC table of catch limits.
 
 6.  Review/update vulnerable biomass estimates
 
