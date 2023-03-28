@@ -7,9 +7,9 @@
 #Timestamp to be added to file names
 Time=Sys.time() 
 Time=format(Time,"%d-%b-%Y")
-# Time=paste0(Time,"_V2") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
-#V1: using FishableArea2020
-#V2: using FishableArea2021
+Time=paste0(Time,"_V1") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
+#V1: using FishableArea2021
+#V2: using FishableArea2022
 
 #Get fishable areas 
 RB_seabed_areaM=read.csv('Data/FishableArea2021.csv')
@@ -18,7 +18,7 @@ RB_seabed_areaM=read.csv('Data/FishableArea2021.csv')
 n_boot=10000
 
 #Set Season of estimation
-Est_Season=2022
+Est_Season=2023
 
 #Set biomass and CV for Reference Areas 
 HIMI_biomass_est=31111 

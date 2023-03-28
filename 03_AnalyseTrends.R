@@ -11,25 +11,17 @@ B_Recent=read.csv(paste0("Output_Recent_Bestimates_",Time,".csv"), stringsAsFact
 #Load past catch limits
 CLs=read.csv("Data/CLs.csv")
 CLs$CL=CLs[,ncol(CLs)] #Take latest CL, then fill with older CLs where needed
-CLs$stars=NA #This will mark when the previous CL was agreed and be used in the final table
 indx=which(is.na(CLs$CL)==T) #Rows needing a CL from the past
 for(i in indx){
   pastCLs=CLs[i,paste0('X',seq(2019,Est_Season-1))]
   ok=max(which(is.na(pastCLs)==F))
   CLs$CL[i]=as.numeric(pastCLs[ok])
-  CLy=names(pastCLs[ok])
-  CLy=as.numeric(strsplit(CLy,"X")[[1]][2])
-  nstars=Est_Season-CLy
-  CLs$stars[i]=paste(rep('*',nstars),collapse = "")
-  rm(pastCLs,ok,CLy,nstars)
+  rm(pastCLs,ok)
 }
 rm(i,indx)
-#build table footer to indicate when past CLs were agreed
-stars=sort(unique(CLs$stars))
-foot=paste0(stars," CL agreed in ",Est_Season-nchar(stars),collapse = "; ")
-rm(stars)
 
-#Keep all estimates to plot long timeseries
+
+#Get estimates
 CPUE_all=CPUE_est
 Chap_all=Chap_est
 #limit to the last 5 years. 
@@ -117,6 +109,8 @@ trends$Chap_lastS=as.numeric(as.character(trends$Chap_lastS))
 #Fix missing species (may happen if no data in the last 5 years)
 indx=which(is.na(trends$Species)==T & trends$RB%in%TOP_target_RBs==F)
 if(length(indx)>0){trends$Species[indx]="TOA"}
+indx=which(is.na(trends$Species)==T & trends$RB%in%TOP_target_RBs==T)
+if(length(indx)>0){trends$Species[indx]="TOP"}
 rm(indx)
 if(any(is.na(trends$Species))){stop("Missing species in trends table")}
 
@@ -339,7 +333,7 @@ trends$B_tonnes=as.numeric(trends$B_tonnes)
 
 
 #Add Past Catch Limits
-CLs=CLs[,c("RB","CL","stars")]
+CLs=CLs[,c("RB","CL")]
 trends=dplyr::left_join(trends,CLs,by="RB")
 
 
@@ -375,7 +369,6 @@ indx=which(trends$Trend_Decision=='ISU' & trends$Sufficent_recaps=='N' & trends$
 trends$Rec_CLs[indx]=pmin(trends$CL12[indx],pmax(trends$CL08[indx],trends$B004[indx]))
 #FSA22: data only in the last of 5 years:
 indx=which(trends$CPUE_lastS==Est_Season & trends$CPUE_nyrs==1)
-# trends$Rec_CLs[indx]=pmin(trends$CL12[indx],pmax(trends$CL08[indx],trends$B004[indx]))
 trends$Rec_CLs[indx]=trends$B004[indx]
 
 
@@ -415,9 +408,6 @@ trends$B004[indx]="x"
 trends$CL08[indx]="x"
 trends$CL12[indx]="x"
 trends$Rec_CLs[indx]="x"
-#Mark CLs that were derived from previous season
-trends$stars[is.na(trends$stars)]=""
-trends$CL=paste0(trends$CL,trends$stars)
 #Fill in those with data only in the last year (FSA22)
 indx=which(trends$CPUE_lastS==Est_Season & trends$CPUE_nyrs==1)
 trends$Trend_Decision[indx]="[]"
@@ -432,9 +422,6 @@ trends=trends[,c("Area","ASD","RB","Species","CL","Trend_Decision","Sufficent_re
 #Add column to mark RBs that require catch advice
 trends$Cadv="N"
 trends$Cadv[trends$RB%in%RBsCAdv]="Y"
-
-#Add footnote
-trends[nrow(trends)+1,1]=foot
 
 #Rename columns
 colnames(trends)=c(
@@ -456,15 +443,10 @@ colnames(trends)=c(
 write.csv(trends, paste0("Trends_",Est_Season,"_and_CLs_",Time,".csv"),row.names=F)
 
 
-#Comment/uncomment below to work on the diagram
-Est_Season=2022
-Time="12-Sep-2022"
-trends=read.csv(paste0("Trends_",Est_Season,"_and_CLs_",Time,".csv"),check.names = F)
-
-
-#Remove footnote
-trends=trends[-nrow(trends),]
-
+#Comment/uncomment below to work on the diagram ! DO NOT LEAVE UNCOMMENTED
+# Est_Season=2022
+# Time="12-Sep-2022"
+# trends=read.csv(paste0("Trends_",Est_Season,"_and_CLs_",Time,".csv"),check.names = F)
 
 
 #Build diagram
