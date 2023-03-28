@@ -23,7 +23,7 @@ RBs_B=st_read(dsn=path.expand(paste0(getwd(),'/Data')), layer="BufferedRBs",quie
 # HIMI_CV_biomass_est=0.0308
 # RSR_open_biomass_est=84658
 # RSR_open_CV_biomass_est=0.0612
-#2021-2022:
+#2021-2023:
 # HIMI_biomass_est=31111 
 # HIMI_CV_biomass_est=0.0281
 # RSR_open_biomass_est=84260
@@ -85,7 +85,7 @@ C2=C2%>%filter(season_ccamlr>=minSeason & season_ccamlr<=maxSeason & target_spec
 LW=LL$OBS_HAUL_BIOLOGY
 LW=LW%>%filter(!is.na(obs_haul_id))
 LW=LW%>%filter(taxon_code%in%c("TOP","TOA"))
-LW=inner_join(C2,LW,by="obs_haul_id")
+LW=inner_join(C2,LW,by="obs_haul_id",multiple = "all")
 LW=dplyr::rename(LW, obs_logbook_id = obs_logbook_id.y)
 LW=dplyr::rename(LW, haul_number = haul_number.y)
 
@@ -93,13 +93,13 @@ Links=LL$OBS_HAUL_TAG_LINK
 
 Rels=LL$OBS_HAUL_TAG_RELEASE 
 Rels=Rels%>%filter(taxon_code%in%c('TOA','TOP'))
-Rels=inner_join(C2,Rels,by="obs_haul_id")
+Rels=inner_join(C2,Rels,by="obs_haul_id",multiple = "all")
 Rels=dplyr::rename(Rels, obs_logbook_id = obs_logbook_id.y)
 Rels=dplyr::rename(Rels, haul_number = haul_number.y)
 
 Recs=LL$OBS_HAUL_TAG_RECAPTURE
 Recs=Recs%>%filter(taxon_code%in%c('TOA','TOP'))
-Recs=inner_join(C2,Recs,by="obs_haul_id")
+Recs=inner_join(C2,Recs,by="obs_haul_id",multiple = "all")
 Recs=dplyr::rename(Recs, obs_logbook_id = obs_logbook_id.y)
 Recs=dplyr::rename(Recs, haul_number = haul_number.y)
 
@@ -110,7 +110,7 @@ Recs$Qrel[which(Recs$obs_haul_tag_recapture_id%in%unique(Qlinks$obs_haul_tag_rec
 rm(Qlinks)
 
 Catch=LL$C2_CATCH
-Catch=inner_join(C2,Catch,by="c2_id")
+Catch=inner_join(C2,Catch,by="c2_id",multiple = "all")
 rm(LL,C2)
 
 #Include quarantined data?

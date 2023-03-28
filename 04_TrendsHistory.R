@@ -16,19 +16,19 @@ b_th=0.1
 
 #Prepare empty dataframe
 T_H=data.frame(RB=RBsToDo)
-T_H=cbind(T_H,matrix(NA,nrow=nrow(T_H),ncol=length(Seasons)*6-1))
-Cnames=paste0(c("Cp","Ch","Tr","Arec","MaxS","CL"),rep(Seasons,each=6))
+T_H=cbind(T_H,matrix(NA,nrow=nrow(T_H),ncol=length(Seasons)*7-1))
+Cnames=paste0(c("Fish","Cp","Ch","Tr","Arec","MaxS","CL"),rep(Seasons,each=7))
 Cnames=c("RB",Cnames[-length(Cnames)])
 if(length(Cnames)!=ncol(T_H)){stop("Mismatch between column names and T_H dataframe dimensions")}
 colnames(T_H)=Cnames
 rm(Cnames)
-#Now, in the trend history table (T_H), for each season, there will be the CPUE beta slope,
+#Now, in the trend history table (T_H), for each season, there will be, if fishing occurred, the CPUE beta slope,
 #the Chapman beta slope, the overall trend, Adequate Recaptures, Last season with data,
 #and the CL recommended for the next season.
 #The last season doesn't get a CL since it hasn't been agreed yet.
 
 
-#Now loop over seasons and RBs, and fill-in the beta slopes
+#Now loop over seasons and RBs, and fill-in the columns
 
 for(Sx in Seasons){
   
@@ -37,6 +37,12 @@ for(Sx in Seasons){
     Cpdat=CPUE_est[which(CPUE_est$RB == r & CPUE_est$Season<=Sx & CPUE_est$Season>=(Sx-4)),]
     #Get Chapman data for that RB and within 5 years of Sx
     Chdat=Chap_est[which(Chap_est$RB == r & Chap_est$Season<=Sx & Chap_est$Season>=(Sx-4)),]
+    #Fishing occurred?
+    if(nrow(Cpdat)==0){
+      T_H[T_H$RB==r,paste0("Fish",Sx)]="N"
+    }else{
+      T_H[T_H$RB==r,paste0("Fish",Sx)]="Y"
+    }
     #Get CPUE slope
     if(nrow(Cpdat)<2){
       #not enough data to get slope
@@ -137,6 +143,7 @@ for(Col in seq(3,ncol(Dec))){
     DecS=colnames(Dec)[Col]
     DecS=as.numeric(strsplit(DecS,"S")[[1]][2]) #Season of estimation
     DecR=Dec$RB[Row] #RB
+    DecFish=T_H[T_H$RB==DecR,paste0("Fish",DecS)] #fished? 
     DecTr=T_H[T_H$RB==DecR,paste0("Tr",DecS)] #Overall trend 
     DecAR=T_H[T_H$RB==DecR,paste0("Arec",DecS)] #Adequate Recaptures
     DecMaxS=T_H[T_H$RB==DecR,paste0("MaxS",DecS)] #Last season with data
@@ -147,8 +154,12 @@ for(Col in seq(3,ncol(Dec))){
     if(is.na(DecMaxS)==F & (DecS-DecMaxS)>4){Dec[Row,Col]="x"} #Can't do trend analysis
     #Data in the last season?
     if(Dec[Row,Col]!="x" & (DecS>DecMaxS)){Dec[Row,Col]="PCL"} #Take Previous Catch Limit
-    #Get trend decision
+    #Data only in the last season?
     if(Dec[Row,Col]%in%c("x","PCL")==F){
+    if(DecFish=="Y" & Dec[Row,Col-1]=="x"){Dec[Row,Col]="CPUEx0.04"}
+    }
+    #Get trend decision
+    if(Dec[Row,Col]%in%c("x","PCL","CPUEx0.04")==F){
       #Insufficent data to get trend (ie only one year)
       if(DecCpsl=="-"){Dec[Row,Col]="-"}
       #Declining
