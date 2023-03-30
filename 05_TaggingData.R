@@ -421,6 +421,11 @@ Mig=Mig%>%select(
   RecASD="ASD_CODE_RECAPTURE",
   RecRB="RESEARCH_BLOCK_CODE_RECAPTURE"
 )
+#Order RBs in Mig table
+Ord_RBs=data.frame(RB=TabDat$`Research Block`[TabDat$`Research Block`%in%unique(Mig$RB)])
+tmp=left_join(Ord_RBs,Mig,by="RB",multiple = "all")
+Mig=tmp[,colnames(Mig)]
+
 write.csv(Mig,paste0("Migrants_",Time,".csv"),row.names = F)
 
 #Split by Area

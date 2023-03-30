@@ -343,9 +343,9 @@ trends$CL08=round(trends$CL*0.8)
 trends$CL12=round(trends$CL*1.2)
 
 # Run some checks before recommending CLs
-if(paste(sort(unique(trends$Trend_Decision),na.last=T),collapse='-')!='--D-ISU'){stop('Problem with Trend_Decision field')}
-if(paste(sort(unique(trends$Sufficent_recaps),na.last=T),collapse='-')!='N-Y'){stop('Problem with Sufficent_recaps field')}
-if(paste(sort(unique(trends$CPUE_Trend_D),na.last=T),collapse='-')!='--N-Y'){stop('Problem with CPUE_Trend_D field')}
+if(all(!unique(trends$Trend_Decision)%in%c("ISU","-","D"))){stop('Problem with Trend_Decision field')}
+if(all(!unique(trends$Sufficent_recaps)%in%c("N","Y"))){stop('Problem with Sufficent_recaps field')}
+if(all(!unique(trends$CPUE_Trend_D)%in%c("N","Y","-"))){stop('Problem with CPUE_Trend_D field')}
 if(is.numeric(trends$B004)==F){stop('B004 field is not numeric')}
 if(is.numeric(trends$CL08)==F){stop('CL08 field is not numeric')}
 if(is.numeric(trends$CL12)==F){stop('CL12 field is not numeric')}
