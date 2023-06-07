@@ -6,7 +6,7 @@ ASDs=load_ASDs()
 RBs=load_RBs()
 SSRUs=load_SSRUs()
 #Get Bathy (! UP TO DATE)
-B=rast("I:/Science/Projects/GEBCO/2022/Processed/GEBCO2022_500.tif")
+B=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_500.tif")
 
 
 
@@ -27,7 +27,7 @@ Cont=st_buffer(st_union(ASDs),dist=0)
 pol=Cont[[1]][[1]]
 pol=st_polygon(list(pol))
 #Mask bathy
-Bm=terra::mask(B, vect(pol))
+Bm=suppressWarnings(terra::mask(B, vect(pol)))
 
 
 #Get labels

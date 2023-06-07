@@ -174,7 +174,7 @@ for (RB in Research_blocks){
   
   #Subset Catch data
   Catch_RB_CHAP=Catch_RB_CHAP[,c("c2_id","season_ccamlr","obs_logbook_id","haul_number","taxon_code","greenweight_caught_kg")]
-  
+  # Catch_RB_CHAP=Catch_RB_CHAP[which(is.na(Catch_RB_CHAP$obs_logbook_id)==F),] #Remove records that have not been linked yet due to data loading issues
   #Subset Release data
   Rel_RB_CHAP=Rel_RB_CHAP[,c("season_ccamlr","obs_logbook_id","haul_number","taxon_code","EST_WEIGHT_KG")]
   # colnames(Rel_RB_CHAP)[colnames(Rel_RB_CHAP)=='SEASON_New']='SEASON'
