@@ -35,10 +35,11 @@ for(Sx in Seasons){
   for (r in unique(RBsToDo)){
     #Get CPUE data for that RB and within 5 years of Sx
     Cpdat=CPUE_est[which(CPUE_est$RB == r & CPUE_est$Season<=Sx & CPUE_est$Season>=(Sx-4)),]
+    CpdatS=Cpdat%>%filter(Season==Sx)
     #Get Chapman data for that RB and within 5 years of Sx
     Chdat=Chap_est[which(Chap_est$RB == r & Chap_est$Season<=Sx & Chap_est$Season>=(Sx-4)),]
     #Fishing occurred?
-    if(nrow(Cpdat)==0){
+    if(nrow(CpdatS)==0){
       T_H[T_H$RB==r,paste0("Fish",Sx)]="N"
     }else{
       T_H[T_H$RB==r,paste0("Fish",Sx)]="Y"

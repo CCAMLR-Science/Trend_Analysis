@@ -8,7 +8,7 @@ SSRUs=load_SSRUs()
 tmpdir="E:/Rtemp"
 #Get Bathy
 Bold=rast("I:/Science/Projects/GEBCO/2021/Processed/GEBCO2021_LL.tif")
-Bnew=rast("I:/Science/Projects/GEBCO/2022/Processed/GEBCO2022_LL.tif")
+Bnew=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_LL.tif")
 Bdiff=Bnew-Bold #Negative means deeper
 
 #Project extent (a single point is enough)
@@ -39,7 +39,7 @@ Cont=st_buffer(st_union(ASDs),dist=0)
 pol=Cont[[1]][[1]]
 pol=st_polygon(list(pol))
 #Mask bathy
-Bm=terra::mask(B, vect(pol))
+Bm=suppressWarnings( terra::mask(B, vect(pol)) )
 
 
 #Get labels
@@ -48,7 +48,7 @@ Labs=read.csv("Data/LabelsRBs.csv")
 Dcuts=c(-15000,-100,100,10000)
 Dcols=c('red',"white",'blue')
 
-png(filename = 'Data/Map_GEBCOComparison_2022.png', width = 2000, height = 1900, units = "px", pointsize = 12,
+png(filename = 'Data/Map_GEBCOComparison_2023.png', width = 2000, height = 1900, units = "px", pointsize = 12,
     bg = "white", res = 200)
 par(mai=c(0,0,0,0),xaxs='i',yaxs='i')
 
@@ -72,44 +72,44 @@ legend('bottomright', legend=c('Deeper','Within 100m','Shallower'),
 dev.off()
 
 
-bb=st_bbox(ASDs[ASDs$GAR_Short_Label=="883",])
-bx=st_as_sfc(bb) #build spatial box to plot
-
-CL=st_union(load_Coastline())
-CLc=st_intersection(CL,bx)
-
-# ASDc=st_union(ASDs)
-ASDc=st_intersection(ASDs,bx)
-
-
-Dc=terra::crop(Bm, vect(bx))
-min(Dc)
-Dp=add_col(var=c(-700,-100),cuts=10,cols=c("red","#FFDFDF"))
-Ds=add_col(var=c(100,1720),cuts=10,cols=c("#DFDFFF","blue"))
-
-Dcuts=c(Dp$cuts,Ds$cuts)
-Dcols=c(Dp$cols,"white",Ds$cols)
-
-
-
-png(filename = 'Data/Map_GEBCOComparison_883_2022.png', width = 2000, height = 2000, units = "px", pointsize = 12,
-    bg = "white", res = 200)
-
-plot(Dc,breaks=Dcuts,col=Dcols,legend=FALSE,axes=FALSE,xpd=T,xlim=c(bb[1],-1200000))
-plot(st_geometry(ASDc),add=T,lwd=2,border="grey20",xpd=T)
-
-plot(CLc,add=T,col='grey70',border='grey50',lwd=0.5)
-add_RefGrid(bb,ResLat=5,ResLon=10,offset = c(10000,30000),lwd=1,fontsize = 0.9)
-
-plot(st_geometry(RBs[grep('883',RBs$name),]),add=T,lwd=2,border='darkgreen')
-plot(st_geometry(RA),add=T,lwd=2,border="orange")
-plot(bx,border='black',add=T,lwd=1.2,xpd=T)
-add_Cscale(height=60,offset = -275,fontsize=1,width=16,lwd=2,
-           cuts = round(Dcuts),
-           cols = Dcols,title = "Difference (m)")
-
-indx=grep("88.3_",Labels$t)
-text(Labels$x[indx],Labels$y[indx],Labels$t[indx],cex=0.7,col='darkgreen',font=2)
-
-dev.off()
-
+# bb=st_bbox(ASDs[ASDs$GAR_Short_Label=="883",])
+# bx=st_as_sfc(bb) #build spatial box to plot
+# 
+# CL=st_union(load_Coastline())
+# CLc=st_intersection(CL,bx)
+# 
+# # ASDc=st_union(ASDs)
+# ASDc=st_intersection(ASDs,bx)
+# 
+# 
+# Dc=terra::crop(Bm, vect(bx))
+# min(Dc)
+# Dp=add_col(var=c(-700,-100),cuts=10,cols=c("red","#FFDFDF"))
+# Ds=add_col(var=c(100,1720),cuts=10,cols=c("#DFDFFF","blue"))
+# 
+# Dcuts=c(Dp$cuts,Ds$cuts)
+# Dcols=c(Dp$cols,"white",Ds$cols)
+# 
+# 
+# 
+# png(filename = 'Data/Map_GEBCOComparison_883_2022.png', width = 2000, height = 2000, units = "px", pointsize = 12,
+#     bg = "white", res = 200)
+# 
+# plot(Dc,breaks=Dcuts,col=Dcols,legend=FALSE,axes=FALSE,xpd=T,xlim=c(bb[1],-1200000))
+# plot(st_geometry(ASDc),add=T,lwd=2,border="grey20",xpd=T)
+# 
+# plot(CLc,add=T,col='grey70',border='grey50',lwd=0.5)
+# add_RefGrid(bb,ResLat=5,ResLon=10,offset = c(10000,30000),lwd=1,fontsize = 0.9)
+# 
+# plot(st_geometry(RBs[grep('883',RBs$name),]),add=T,lwd=2,border='darkgreen')
+# plot(st_geometry(RA),add=T,lwd=2,border="orange")
+# plot(bx,border='black',add=T,lwd=1.2,xpd=T)
+# add_Cscale(height=60,offset = -275,fontsize=1,width=16,lwd=2,
+#            cuts = round(Dcuts),
+#            cols = Dcols,title = "Difference (m)")
+# 
+# indx=grep("88.3_",Labels$t)
+# text(Labels$x[indx],Labels$y[indx],Labels$t[indx],cex=0.7,col='darkgreen',font=2)
+# 
+# dev.off()
+# 

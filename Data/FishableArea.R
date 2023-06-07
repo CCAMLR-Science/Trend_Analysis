@@ -1,6 +1,7 @@
 #Script to compute fishable areas 
 library(CCAMLRGIS)
-library(terra) #Package used to handle the GEBCO data
+library(terra) 
+library(dplyr)
 
 #Load research blocks
 RBs=load_RBs()
@@ -28,7 +29,7 @@ PolysLL=rbind(PolysLL,RefAreas)
 
 
 #Get the unprojected GEBCO data
-B=rast("I:/Science/Projects/GEBCO/2022/Processed/GEBCO2022_LL.tif")
+B=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_LL.tif")
 #Convert Polys to Spatvector for the terra package
 PolysLLsv=vect(PolysLL)
 #Loop over polygons that are inside PolysLLsv
@@ -50,6 +51,7 @@ for (i in seq(1,length(PolysLLsv))){
   #Store result
   RawAr=rbind(RawAr,data.frame(Poly=pname,Area=Ar))
 }
+RawAr=data.frame(Poly=RawAr[,1],Area=RawAr[,3])
 #Merge results for RSR_open (was split at the antimeridian)
 RawAr=rbind(RawAr,data.frame(
   Poly="RSR_open",
@@ -59,4 +61,4 @@ RawAr=rbind(RawAr,data.frame(
 RawAr=RawAr[-which(RawAr$Poly%in%c("RSR_open_East","RSR_open_West")),]
 colnames(RawAr)=c("Polys","Fishable_area")
 #Export
-write.csv(RawAr,'Data/FishableArea2022.csv',row.names = F)
+write.csv(RawAr,'Data/FishableArea2023.csv',row.names = F)

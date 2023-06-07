@@ -82,6 +82,11 @@ LL=ccamlrtools::load_science_data(logbook_type = "longline")
 C2=LL$C2
 C2=C2%>%filter(season_ccamlr>=minSeason & season_ccamlr<=maxSeason & target_species%in%c('TOP','TOA','TOT'))
 
+Catch=LL$C2_CATCH
+Catch=inner_join(C2,Catch,by="c2_id",multiple = "all")
+
+C2=C2%>%filter(!is.na(obs_haul_id))
+
 LW=LL$OBS_HAUL_BIOLOGY
 LW=LW%>%filter(!is.na(obs_haul_id))
 LW=LW%>%filter(taxon_code%in%c("TOP","TOA"))
@@ -109,8 +114,7 @@ Recs$Qrel=0
 Recs$Qrel[which(Recs$obs_haul_tag_recapture_id%in%unique(Qlinks$obs_haul_tag_recapture_id))]=1
 rm(Qlinks)
 
-Catch=LL$C2_CATCH
-Catch=inner_join(C2,Catch,by="c2_id",multiple = "all")
+
 rm(LL,C2)
 
 #Include quarantined data?
