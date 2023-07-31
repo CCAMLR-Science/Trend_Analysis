@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # Trend analysis
 
-Latest report: [WG-SAM-2022/08](https://meetings.ccamlr.org/en/wg-sam-2022/08)
+Latest report: [WG-SAM-2023/16](https://meetings.ccamlr.org/wg-sam-2023/16)
 
 ## Annual updates
 
