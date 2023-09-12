@@ -250,6 +250,11 @@ Catch=Catch%>%filter(is.na(RESEARCH_BLOCK_CODE_END_SET)==F |
                      is.na(RESEARCH_BLOCK_CODE_START_SET)==F |  
                      is.na(REF_AREA_CODE_START_SET)==F | 
                      is.na(REF_AREA_CODE_END_SET)==F )
+
+#temp fix for line_length_m name change###############################################################################################
+colnames(Catch)[grep("line_length",colnames(Catch))]="line_length_m"
+######################################################################################################################################
+
 #Thin out catch
 Catch=Catch%>%select(
   datetime_set_start,
