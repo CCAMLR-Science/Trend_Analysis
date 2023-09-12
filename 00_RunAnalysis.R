@@ -14,9 +14,6 @@ Time=paste0(Time,"_V2") #Add suffix to files if desired (e.g. to compare results
 #Get fishable areas 
 RB_seabed_areaM=read.csv('Data/FishableArea2023.csv')
 
-#Set number of bootstrap iterations
-n_boot=10000
-
 #Set Season of estimation
 Est_Season=2023
 
@@ -41,6 +38,9 @@ RBsCAdv=c("486_2","486_3","486_4","486_5",
           "5842_1","5842_2",
           "882_1","882_2","882_3","882_4","882H",
           "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10")
+
+#Set number of bootstrap iterations
+n_boot=10000
 
 #Compare to GIS database
 RBcheck=CCAMLRGIS::load_RBs()
