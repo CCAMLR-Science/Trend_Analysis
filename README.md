@@ -64,6 +64,13 @@ them for these values. They go in the script *00_RunAnalysis.R*, under
 “\#Set biomass and CV for Reference Areas”. Record these values also in
 *01_LoadData.R* for posterity.
 
+7.  Review/update the list of RBs that require catch advice
+
+Update list (*RBsCAdv* in *00_RunAnalysis.R*) based on the ASDs that
+have notifications
+(<https://www.ccamlr.org/fishery-notifications/notified/nesummary> or
+<https://www.ccamlr.org/fishery-notifications/notified/research>).
+
 ## How to run the analysis
 
 Simply run “00_RunAnalysis.R”, it will source all other scripts.
