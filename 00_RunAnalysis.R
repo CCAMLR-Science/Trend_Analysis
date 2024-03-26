@@ -18,10 +18,10 @@ RB_seabed_areaM=read.csv('Data/FishableArea2023.csv')
 Est_Season=2023
 
 #Set biomass and CV for Reference Areas 
-HIMI_biomass_est=31111 
-HIMI_CV_biomass_est=0.0281
-RSR_open_biomass_est=84260
-RSR_open_CV_biomass_est=0.0581
+HIMI_biomass_est=25043
+HIMI_CV_biomass_est=0.0976
+RSR_open_biomass_est=89809
+RSR_open_CV_biomass_est=0.0594
 
 #List RBs in the proper order
 RBsToDo=c("481_1","481_2","481_3","482_N","482_S",

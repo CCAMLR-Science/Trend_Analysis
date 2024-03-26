@@ -4,7 +4,7 @@
 # Trend analysis
 
 Latest report:
-[WG-SAM-2023/16](https://meetings.ccamlr.org/wg-sam-2023/16)
+[WG-FSA-2023/05](https://meetings.ccamlr.org/en/wg-fsa-2023/05)
 
 ## Annual updates
 
@@ -52,10 +52,9 @@ trend plots, and may be updated in that script, if needed.
 
 5.  Update past catch limits.
 
-Every year new catch limits are agreed upon. Record the previous catch
-limits in the file *CLs.csv* by adding a column every year. If a new RB
-is created, add a row for it. Use the *GetCLs* script (only once a
-year), but always double check with the SC table of catch limits.
+Every year new catch limits are agreed upon. Use the *GetCLs* script
+(only once a year), but always double check with the SC table of catch
+limits. If a new RB is created, add a row for it.
 
 6.  Review/update vulnerable biomass estimates
 
