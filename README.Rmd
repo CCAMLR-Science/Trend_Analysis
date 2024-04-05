@@ -49,7 +49,7 @@ Once stock assessments in the Reference Areas have been agreed by the Commission
 
 7. Review/update the list of RBs that require catch advice
 
-Update list (*RBsCAdv* in *00_RunAnalysis.R*) based on the ASDs that have notifications (https://www.ccamlr.org/fishery-notifications/notified/nesummary or https://www.ccamlr.org/fishery-notifications/notified/research).
+Update list (*RBsCAdv* in *00_RunAnalysis.R* and in *Map_and_AreaThumbnails.R*) based on the ASDs that have notifications (https://www.ccamlr.org/fishery-notifications/notified/nesummary or https://www.ccamlr.org/fishery-notifications/notified/research).
 
 
 ## How to run the analysis

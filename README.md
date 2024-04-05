@@ -66,8 +66,8 @@ them for these values. They go in the script *00_RunAnalysis.R*, under
 
 7.  Review/update the list of RBs that require catch advice
 
-Update list (*RBsCAdv* in *00_RunAnalysis.R*) based on the ASDs that
-have notifications
+Update list (*RBsCAdv* in *00_RunAnalysis.R* and in
+*Map_and_AreaThumbnails.R*) based on the ASDs that have notifications
 (<https://www.ccamlr.org/fishery-notifications/notified/nesummary> or
 <https://www.ccamlr.org/fishery-notifications/notified/research>).
 
