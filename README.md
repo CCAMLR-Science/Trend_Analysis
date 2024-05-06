@@ -65,7 +65,7 @@ them for these values. They go in the script *00_RunAnalysis.R*, under
 *01_LoadData.R* for posterity.
 
 7.  Review/update the list of RBs that require catch advice (wait until
-    1 June, the notification deadline)
+    1 June; the notification deadline)
 
 Update list (*RBsCAdv* in *00_RunAnalysis.R* and in
 *Map_and_AreaThumbnails.R*) based on the ASDs that have notifications
