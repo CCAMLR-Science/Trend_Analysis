@@ -12,8 +12,7 @@ B=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_500.tif")
 # B=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_10000.tif")
 
 #List RBs that require catch advice
-RBsCAdv=c("482_N","482_S",
-          "486_2","486_3","486_4","486_5",
+RBsCAdv=c("486_2","486_3","486_4","486_5",
           "5841_1","5841_2","5841_3","5841_4","5841_5","5841_6",
           "5842_1","5842_2",
           "882_1","882_2","882_3","882_4","882H",
@@ -45,7 +44,7 @@ pol=st_polygon(list(pol))
 pol=st_sfc(pol, crs = 6932)
 pol=st_set_geometry(data.frame(name="cont"),pol)
 #Get Isobaths
-Iso=get_iso_polys(B,Poly=pol, Depths=c(-1800,-600))
+Iso=get_iso_polys(B,Poly=pol, Cuts=c(-1800,-600))
 
 #Get labels
 Labs=read.csv("Data/LabelsRBs.csv")
