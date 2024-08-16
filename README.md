@@ -4,7 +4,7 @@
 # Trend analysis
 
 Latest report:
-[WG-FSA-2023/05](https://meetings.ccamlr.org/en/wg-fsa-2023/05)
+[WG-SAM-2024/12](https://meetings.ccamlr.org/en/wg-sam-2024/12)
 
 ## Annual updates
 
