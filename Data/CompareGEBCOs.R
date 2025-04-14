@@ -7,8 +7,8 @@ RBs=load_RBs()
 SSRUs=load_SSRUs()
 tmpdir="E:/Rtemp"
 #Get Bathy
-Bold=rast("I:/Science/Projects/GEBCO/2021/Processed/GEBCO2021_LL.tif")
-Bnew=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_LL.tif")
+Bold=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_LL.tif")
+Bnew=rast("I:/Science/Projects/GEBCO/2024/Processed/GEBCO2024_LL.tif")
 Bdiff=Bnew-Bold #Negative means deeper
 
 #Project extent (a single point is enough)
@@ -48,7 +48,7 @@ Labs=read.csv("Data/LabelsRBs.csv")
 Dcuts=c(-15000,-100,100,10000)
 Dcols=c('red',"white",'blue')
 
-png(filename = 'Data/Map_GEBCOComparison_2023.png', width = 2000, height = 1900, units = "px", pointsize = 12,
+png(filename = 'Data/Map_GEBCOComparison_2024.png', width = 2000, height = 1900, units = "px", pointsize = 12,
     bg = "white", res = 200)
 par(mai=c(0,0,0,0),xaxs='i',yaxs='i')
 

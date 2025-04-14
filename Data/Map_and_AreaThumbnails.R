@@ -8,15 +8,14 @@ SSRUs=load_SSRUs()
 #Get coastline
 coast=load_Coastline()
 #Get Bathy (! UP TO DATE)
-B=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_500.tif")
-# B=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_10000.tif")
+B=rast("I:/Science/Projects/GEBCO/2024/Processed/GEBCO2024_500.tif")
 
 #List RBs that require catch advice
 RBsCAdv=c("486_2","486_3","486_4","486_5",
           "5841_1","5841_2","5841_3","5841_4","5841_5","5841_6",
           "5842_1","5842_2",
           "882_1","882_2","882_3","882_4","882H",
-          "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10")
+          "883_1","883_2","883_3","883_4","883_6","883_11","883_12")
 
 
 
@@ -62,8 +61,6 @@ plot(st_geometry(Iso),col="green",border=NA,add=T)
 plot(st_geometry(coast[coast$surface=="Ice",]),col="white",lwd=0.5,add=T)
 plot(st_geometry(ASDs),lwd=2,border="grey20",add=T,xpd=T)
 plot(st_geometry(coast[coast$surface=="Land",]),col='grey70',border='grey50',add=T,lwd=0.5)
-
-# plot(st_geometry(Coast[Coast$ID=='All',]),col='grey',add=T)
 
 add_RefGrid(bb=st_bbox(ASDs),ResLat=10,ResLon=20,LabLon=0,offset = 1,lwd=1,fontsize = 0.9)
 

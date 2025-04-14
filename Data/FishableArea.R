@@ -29,7 +29,7 @@ PolysLL=rbind(PolysLL,RefAreas)
 
 
 #Get the unprojected GEBCO data
-B=rast("I:/Science/Projects/GEBCO/2023/Processed/GEBCO2023_LL.tif")
+B=rast("I:/Science/Projects/GEBCO/2024/Processed/GEBCO2024_LL.tif")
 #Convert Polys to Spatvector for the terra package
 PolysLLsv=vect(PolysLL)
 #Loop over polygons that are inside PolysLLsv
@@ -61,4 +61,4 @@ RawAr=rbind(RawAr,data.frame(
 RawAr=RawAr[-which(RawAr$Poly%in%c("RSR_open_East","RSR_open_West")),]
 colnames(RawAr)=c("Polys","Fishable_area")
 #Export
-write.csv(RawAr,'Data/FishableArea2023.csv',row.names = F)
+write.csv(RawAr,'Data/FishableArea2024.csv',row.names = F)

@@ -57,18 +57,15 @@ r882H=NoteasyRBs[NoteasyRBs$name%in%c("882H"),]
 r882H=r882H%>%select(name)
 RBs_B_done=rbind(RBs_B_done,r882H)
 
-#883_3 | 883_4: line @Lon -85
-r883_3=NoteasyRBs[NoteasyRBs$name=="883_3",]
-r883_4=NoteasyRBs[NoteasyRBs$name=="883_4",]
-r883_3=CCAMLRGIS:::add_buffer(r883_3,buf=5/1.852) #5km buffer
-r883_4=CCAMLRGIS:::add_buffer(r883_4,buf=5/1.852) #5km buffer
 
-r883_3c=create_Polys(Input=data.frame(nam=c(1,1,1,1),
-                                      Lat=c(-50,-80,-80,-50),
-                                      Lon=c(-60,-60,-85,-85)))
-r883_3=suppressWarnings(st_difference(r883_3,r883_3c))
-r883_3=r883_3%>%select(name)
-RBs_B_done=rbind(RBs_B_done,r883_3)
+plot(st_geometry(NoteasyRBs[NoteasyRBs$name%in%c("883_4","883_3","883_11","883_12"),]))
+add_RefGrid(bb=st_bbox(NoteasyRBs[NoteasyRBs$name%in%c("883_4","883_3","883_11","883_12"),]),
+            ResLat=0.5,ResLon=1)
+
+
+#883_4: line @Lon -85
+r883_4=NoteasyRBs[NoteasyRBs$name=="883_4",]
+r883_4=CCAMLRGIS:::add_buffer(r883_4,buf=5/1.852) #5km buffer
 
 r883_4c=create_Polys(Input=data.frame(nam=c(1,1,1,1),
                                       Lat=c(-50,-80,-80,-50),
@@ -76,6 +73,92 @@ r883_4c=create_Polys(Input=data.frame(nam=c(1,1,1,1),
 r883_4=suppressWarnings(st_difference(r883_4,r883_4c))
 r883_4=r883_4%>%select(name)
 RBs_B_done=rbind(RBs_B_done,r883_4)
+
+#883_3: line @Lon -85 and intersection with 883_12
+par(mai=rep(0,4))
+plot(st_geometry(NoteasyRBs[NoteasyRBs$name%in%c('883_3','883_12'),]),col='orange',lwd=0.1)
+plot(st_geometry(RBs_B_done[RBs_B_done$name=="883_4",]),border='green',lwd=0.1,add=T)
+
+r883_3=NoteasyRBs[NoteasyRBs$name=="883_3",]
+r883_12=NoteasyRBs[NoteasyRBs$name=="883_12",]
+r883_3=CCAMLRGIS:::add_buffer(r883_3,buf=10/1.852) #10km buffer
+r883_12=CCAMLRGIS:::add_buffer(r883_12,buf=10/1.852) #10km buffer
+
+plot(st_geometry(r883_3),add=T)
+plot(st_geometry(r883_12),add=T)
+
+Int=suppressWarnings( st_intersection(r883_3,r883_12) )
+Int=st_coordinates(Int)
+Int=project_data(Int,NamesIn = c('Y','X'),inv=T)
+#Point1
+P1=Int[which(Int$Latitude>-69.91 & Int$Longitude<(-90.25)),]
+points(P1$X,P1$Y,col="green")
+#Point2
+P2=Int[which(Int$Latitude==min(Int$Latitude)),]
+points(P2$X,P2$Y,col="green")
+
+#Do the 85W cut first
+r883_3=NoteasyRBs[NoteasyRBs$name=="883_3",]
+r883_3=CCAMLRGIS:::add_buffer(r883_3,buf=5/1.852) #5km buffer
+
+r883_3c=create_Polys(Input=data.frame(nam=c(1,1,1,1),
+                                      Lat=c(-50,-80,-80,-50),
+                                      Lon=c(-85,-85,-80,-80)))
+r883_3=suppressWarnings(st_difference(r883_3,r883_3c))
+
+plot(st_geometry(r883_3),border='pink',add=T)
+
+#Now do the border with 883_12
+r883_3c=create_Polys(Input=data.frame(nam=1,
+                                      Lat=c(P1$Latitude,-70,-71,P2$Latitude,-71.5,-69.5),
+                                      Lon=c(P1$Longitude,-90,-90,P2$Longitude,-92,-92)))
+r883_3=suppressWarnings(st_difference(r883_3,r883_3c))
+
+plot(st_geometry(r883_3),border='cyan',add=T)
+
+r883_3=r883_3%>%select(name)
+RBs_B_done=rbind(RBs_B_done,r883_3)
+
+
+#883_12: Intersection with 883_3 and line at 95W
+par(mai=rep(0,4))
+plot(st_geometry(NoteasyRBs[NoteasyRBs$name%in%c('883_3','883_12'),]),col='orange',lwd=0.1)
+plot(st_geometry(RBs_B_done[RBs_B_done$name=="883_3",]),border='green',lwd=0.1,add=T)
+
+#Do the border with 883_3 first
+r883_12=NoteasyRBs[NoteasyRBs$name=="883_12",]
+r883_12=CCAMLRGIS:::add_buffer(r883_12,buf=5/1.852) #5km buffer
+
+r883_12c=create_Polys(Input=data.frame(nam=1,
+                                      Lat=c(P1$Latitude,-69.5,-71.5,P2$Latitude,-71,-70),
+                                      Lon=c(P1$Longitude,-89,-89,P2$Longitude,-90,-90)))
+r883_12=suppressWarnings(st_difference(r883_12,r883_12c))
+
+plot(st_geometry(r883_12),border='pink',add=T)
+
+#Now do the 85W cut
+r883_12c=create_Polys(Input=data.frame(nam=1,
+                                      Lat=c(-50,-80,-80,-50),
+                                      Lon=c(-100,-100,-95,-95)))
+r883_12=suppressWarnings(st_difference(r883_12,r883_12c))
+
+plot(st_geometry(r883_12),border='cyan',add=T,lwd=2)
+
+r883_12=r883_12%>%select(name)
+RBs_B_done=rbind(RBs_B_done,r883_12)
+
+
+#883_11: line @Lon -95
+r883_11=NoteasyRBs[NoteasyRBs$name=="883_11",]
+r883_11=CCAMLRGIS:::add_buffer(r883_11,buf=5/1.852) #5km buffer
+
+r883_11c=create_Polys(Input=data.frame(nam=1,
+                                      Lat=c(-50,-80,-80,-50),
+                                      Lon=c(-90,-90,-95,-95)))
+r883_11=suppressWarnings(st_difference(r883_11,r883_11c))
+plot(st_geometry(r883_11),border='red',add=T,lwd=2)
+r883_11=r883_11%>%select(name)
+RBs_B_done=rbind(RBs_B_done,r883_11)
 
 
 #883_2 | 882_1: line @Lon -105 and intersection between buffers to get angle
@@ -266,6 +349,8 @@ RBs_B_done$col[RBs_B_done$name=='481_2']='blue'
 RBs_B_done$col[RBs_B_done$name=='481_3']='orange'
 RBs_B_done$col[RBs_B_done$name=='482_N']='blue'
 RBs_B_done$col[RBs_B_done$name=='482_S']='orange'
+RBs_B_done$col[RBs_B_done$name=='883_12']='orange'
+RBs_B_done$col[RBs_B_done$name=='883_11']='blue'
 
 
 png(filename="BufferedRBs.png", width = 10000, height = 10000,res=600)
