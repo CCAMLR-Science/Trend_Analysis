@@ -7,7 +7,7 @@
 #Timestamp to be added to file names
 Time=Sys.time() 
 Time=format(Time,"%d-%b-%Y")
-Time=paste0(Time,"_V2") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
+Time=paste0(Time,"_V1") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
 #V1: using FishableArea2023
 #V2: using FishableArea2024
 
@@ -15,13 +15,13 @@ Time=paste0(Time,"_V2") #Add suffix to files if desired (e.g. to compare results
 RB_seabed_areaM=read.csv('Data/FishableArea2023.csv')
 
 #Set Season of estimation
-Est_Season=2024
+Est_Season=2025
 
 #Set biomass and CV for Reference Areas 
-HIMI_biomass_est=25043
-HIMI_CV_biomass_est=0.0976
-RSR_open_biomass_est=89809
-RSR_open_CV_biomass_est=0.0594
+HIMI_biomass_est=23485
+HIMI_CV_biomass_est=0.0435
+RSR_open_biomass_est=88594
+RSR_open_CV_biomass_est=0.057
 
 #List RBs in the proper order
 RBsToDo=c("481_1","481_2","481_3",
@@ -32,13 +32,13 @@ RBsToDo=c("481_1","481_2","481_3",
           "5843a_1",
           "5844b_1","5844b_2",
           "882_1","882_2","882_3","882_4","882H",
-          "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10")
+          "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10","883_11","883_12")
 #List RBs that require catch advice (Wait until 1-June when all notifications are up)
 RBsCAdv=c("486_2","486_3","486_4","486_5",
           "5841_1","5841_2","5841_3","5841_4","5841_5","5841_6",
           "5842_1","5842_2",
           "882_1","882_2","882_3","882_4","882H",
-          "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10")
+          "883_1","883_2","883_3","883_4","883_6","883_11","883_12")
 
 #Set number of bootstrap iterations
 n_boot=10000

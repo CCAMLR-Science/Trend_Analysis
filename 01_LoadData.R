@@ -28,11 +28,16 @@ RBs_B=st_read(dsn=path.expand(paste0(getwd(),'/Data')), layer="BufferedRBs",quie
 # HIMI_CV_biomass_est=0.0281
 # RSR_open_biomass_est=84260
 # RSR_open_CV_biomass_est=0.0581
-#2024-? (WG-FSA-2023 para 4.8)
+#2024 (WG-FSA-2023 para 4.8)
 # HIMI_biomass_est=25043
 # HIMI_CV_biomass_est=0.0976
 # RSR_open_biomass_est=89809
 # RSR_open_CV_biomass_est=0.0594
+#2025-? (WG-FSA-IMAF-2024 para 4.116)
+# HIMI_biomass_est=23485
+# HIMI_CV_biomass_est=0.0435
+# RSR_open_biomass_est=88594
+# RSR_open_CV_biomass_est=0.057
 #Min and max seasons for data queries
 maxSeason=Est_Season
 minSeason=2012
