@@ -3,6 +3,12 @@ library(CCAMLRGIS)
 library(dplyr)
 setwd('I:/Science/Projects/Trend_Analysis/Data')
 
+
+#NOTE TEMP FIX FOR 483A!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+MAs=load_MAs()
+MAs=MAs%>%select(name=GAR_Short_Label)%>%filter(name=="483A")
+
+
 RBs=load_RBs()
 
 #Get SSRU 882H to add it to RBs
@@ -353,11 +359,19 @@ RBs_B_done$col[RBs_B_done$name=='883_12']='orange'
 RBs_B_done$col[RBs_B_done$name=='883_11']='blue'
 
 
+
+#NOTE TEMP FIX FOR 483A!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+MAs$col="green"
+RBs_B_done=rbind(RBs_B_done,MAs)
+
+
 png(filename="BufferedRBs.png", width = 10000, height = 10000,res=600)
 par(mai=rep(0,4))
 plot(st_geometry(RBs_B_done),border='black',col=RBs_B_done$col,lwd=0.05)
 plot(st_geometry(RBs_B),lwd=0.05,col=rgb(1,1,1,alpha=0.5),border=rgb(1,1,1,alpha=0.5),add=T)
 text(Cen[,1],Cen[,2],RBs_B$name,cex=0.5)
 dev.off()
+
+
 
 st_write(RBs_B_done, "BufferedRBs.shp",append = F,quiet = T)

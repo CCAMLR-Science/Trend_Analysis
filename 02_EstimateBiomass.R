@@ -2,6 +2,13 @@
 cat("CPUE start", sep = "\n")
 
 #G. Estimate Biomass using CPUE####
+
+#EXCLUDE RBs for V4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Research_blocks=Research_blocks[-which(Research_blocks%in%Exclc)]
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 store_biomass_estimate=NULL
 for (RB in Research_blocks){
   cat(RB);cat(" | ")
@@ -44,7 +51,7 @@ for (RB in Research_blocks){
   
   # Initialize dataframe to store estimates
   Survey_est=sort(unique(Catch_RB_CPUE$season_ccamlr))
-  
+
   #Initialize dataframe to store estimates
   store_annual_estimates=data.frame(matrix(0,nrow=length(Survey_est),ncol=11))
   names(store_annual_estimates)=c('RB','Species','Season','Ref_area','RefArea_seabed_area','RefArea_N_Hauls','RB_seabedarea','RB_N_Hauls','Est','CI_lower','CI_upper')
@@ -144,6 +151,11 @@ cat("\n")
 
 # find Research blocks with at least one recapture in any survey year
 Research_blocks=unique(Links$RESEARCH_BLOCK_CODE_RECAPTURE)
+
+#EXCLUDE RBs for V4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Research_blocks=Research_blocks[-which(Research_blocks%in%Excl)]
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 store_biomass_estimate_chapman=NULL
 for (RB in Research_blocks){
@@ -303,7 +315,10 @@ store_B_est_all=rbind(store_biomass_estimates_chapman,data.frame(store_biomass_e
 write.csv(store_B_est_all,paste0("Output_Bestimates_",Time,".csv"),row.names = FALSE)
 
 
-store_B_est_most_recent <- ddply(store_B_est_all,.(Species,Method,RB),function(x){x[which.max(x$Season),]},.drop=FALSE)
+# store_B_est_most_recent <- ddply(store_B_est_all,.(Species,Method,RB),function(x){x[which.max(x$Season),]},.drop=FALSE)
+store_B_est_most_recent=store_B_est_all%>%group_by(Species,Method,RB)%>%filter(Season==max(Season))
+store_B_est_most_recent=as.data.frame(store_B_est_most_recent)
+
 # remove hauls and catch limit 
 store_B_est_most_recent=subset(store_B_est_most_recent, select=-RB_N_Hauls)
 store_B_est_most_recent=store_B_est_most_recent[order(store_B_est_most_recent$RB),]

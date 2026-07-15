@@ -123,6 +123,7 @@ for(Sx in Seasons){
 T_H$ASD=NA
 T_H$ASD[grep('481',T_H$RB)]='48.1'
 T_H$ASD[grep('482',T_H$RB)]='48.2'
+T_H$ASD[grep('483',T_H$RB)]='48.3'
 T_H$ASD[grep('486',T_H$RB)]='48.6'
 T_H$ASD[grep('5841',T_H$RB)]='58.4.1'
 T_H$ASD[grep('5842',T_H$RB)]='58.4.2'
