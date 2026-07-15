@@ -51,11 +51,13 @@ In the subfolder *~/Data*, the images *Map_TrendAnalysis.png*,
 *Map_and_AreaThumbnails.R*. These images are used in the report and
 trend plots, and may be updated in that script, if needed.
 
-5.  Update past catch limits.
+5.  Update catch limits.
 
 Every year new catch limits are agreed upon. Use the *GetCLs* script
 (only once a year), but always double check with the SC table of catch
-limits. If a new RB is created, add a row for it.
+limits. If a new RB is created, add a row for it. Also run the
+*GetAllCLs* script, this one is used for the full CPUE history plots
+(see *06_CPUE_history.R*).
 
 6.  Review/update vulnerable biomass estimates
 

@@ -3,12 +3,22 @@
 library(dplyr)
 library(stringr)
 
-#Set season, then run
+#Set season, then run NB: add RBs in "CLs.csv" if new ones have been created
 Season = 2025
 
 
 
 CLs=read.csv("Data/CLs.csv",check.names = F)
+
+
+
+
+#Temp FIX for 483A !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+CLs=rbind(CLs,c("483A",c(0,0,0,NA,NA,NA,NA)))
+
+
+
+
 
 
 

@@ -376,6 +376,7 @@ trends$Rec_CLs[indx]=trends$B004[indx]
 trends$ASD=NA
 trends$ASD[grep('481',trends$RB)]='48.1'
 trends$ASD[grep('482',trends$RB)]='48.2'
+trends$ASD[grep('483',trends$RB)]='48.3'
 trends$ASD[grep('486',trends$RB)]='48.6'
 trends$ASD[grep('5841',trends$RB)]='58.4.1'
 trends$ASD[grep('5842',trends$RB)]='58.4.2'

@@ -7,12 +7,18 @@
 #Timestamp to be added to file names
 Time=Sys.time() 
 Time=format(Time,"%d-%b-%Y")
-Time=paste0(Time,"_V1") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
-#V1: using FishableArea2023
-#V2: using FishableArea2024
+Time=paste0(Time,"_V4") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
+#V1: using FishableArea2024 and 5km buffers
+#V2: using FishableArea2025 and 5km buffers
+#V3: using FishableArea2025 and 1FSR buffers
+#V4: using FishableArea2025 and 2FSR buffers
+
+Exclc="883_12" #For V4 exclude them right before CPUE in 02_EstimateBiomass.R (@l.7)
+Excl="5843a_1" #For V4 exclude them right before Chapman in 02_EstimateBiomass.R (@l.158)
+
 
 #Get fishable areas 
-RB_seabed_areaM=read.csv('Data/FishableArea2023.csv')
+RB_seabed_areaM=read.csv('Data/FishableArea2025.csv')
 
 #Set Season of estimation
 Est_Season=2025
@@ -33,8 +39,12 @@ RBsToDo=c("481_1","481_2","481_3",
           "5844b_1","5844b_2",
           "882_1","882_2","882_3","882_4","882H",
           "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10","883_11","883_12")
+
+
+
 #List RBs that require catch advice (Wait until 1-June when all notifications are up)
-RBsCAdv=c("486_2","486_3","486_4","486_5",
+RBsCAdv=c("482_N","482_S",
+          "486_2","486_3","486_4","486_5",
           "5841_1","5841_2","5841_3","5841_4","5841_5","5841_6",
           "5842_1","5842_2",
           "882_1","882_2","882_3","882_4","882H",
@@ -71,3 +81,10 @@ source("04_TrendsHistory.R")
 
 #6. Tagging data post-processing
 source("05_TaggingData.R")
+
+#7. Full CPUE estimates time series
+source("06_CPUE_history.R")
+
+#Optional: send notification of completion
+PBtext="Trend Analysis Completed."
+source("C:/Users/stephane/Desktop/CCAMLR/CODES/99 - PushBullet/PushBullet.R")

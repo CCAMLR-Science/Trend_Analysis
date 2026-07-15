@@ -8,14 +8,23 @@ SSRUs=load_SSRUs()
 #Get coastline
 coast=load_Coastline()
 #Get Bathy (! UP TO DATE)
-B=rast("I:/Science/Projects/GEBCO/2024/Processed/GEBCO2024_500.tif")
+B=rast("I:/Science/Projects/GEBCO/2025/Processed/GEBCO2025_500.tif")
+
+
+
+# #NOTE TEMP FIX FOR 483A!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# MAs=load_MAs()
+# MAs=MAs%>%select(name=GAR_Short_Label)%>%filter(name=="483A")
+
+
 
 #List RBs that require catch advice
 RBsCAdv=c("486_2","486_3","486_4","486_5",
           "5841_1","5841_2","5841_3","5841_4","5841_5","5841_6",
           "5842_1","5842_2",
           "882_1","882_2","882_3","882_4","882H",
-          "883_1","883_2","883_3","883_4","883_6","883_11","883_12")
+          "883_1","883_2","883_3","883_4","883_6","883_11","883_12",
+          "482_N","482_S")
 
 
 
@@ -66,6 +75,7 @@ add_RefGrid(bb=st_bbox(ASDs),ResLat=10,ResLon=20,LabLon=0,offset = 1,lwd=1,fonts
 
 plot(st_geometry(RBs),add=T,lwd=2,border='red')
 plot(st_geometry(RBsY),add=T,lwd=2,border='blue')
+# plot(st_geometry(MAs),add=T,lwd=2,border='blue') #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 plot(st_geometry(RA),add=T,lwd=2,border=rgb(1,0.5,0,0.5),col=rgb(1,0.5,0,0.4))
 
 text(Labs$x,Labs$y,Labs$text,cex=1,col='darkred',font=2,xpd=T)

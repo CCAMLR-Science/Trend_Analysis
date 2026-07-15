@@ -736,7 +736,7 @@ Ar_Im=arrange(Ar_Im,desc(n))
 Ar_Em=arrange(Ar_Em,desc(n))
 
 
-png(filename = 'Map_Migrations.png', width = 4000, height = 3800, units = "px", pointsize = 12,
+png(filename = paste0("Map_Migrations_",Time,".png"), width = 4000, height = 3800, units = "px", pointsize = 12,
     bg = "white", res = 200)
 par(mai=rep(0,4),xaxs="i",yaxs="i")
 plot(st_geometry(ASDs),col="grey90",lwd=2)

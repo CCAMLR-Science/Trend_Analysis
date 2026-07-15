@@ -1,6 +1,5 @@
 library(BERT)
 library(RODBC)
-library(plyr)
 library(CCAMLRGIS)
 library(dplyr)
 
@@ -12,7 +11,9 @@ Ref_area_seabed_areaM=RB_seabed_areaM[RB_seabed_areaM$Polys%in%c('RSR_open','HIM
 #Get spatial objects
 ASDs=load_ASDs()
 RefAreas=st_read(dsn=path.expand(paste0(getwd(),'/Data')), layer="RefAreas", quiet = TRUE)
-RBs_B=st_read(dsn=path.expand(paste0(getwd(),'/Data')), layer="BufferedRBs",quiet = TRUE)
+# RBs_B=st_read(paste0(getwd(),'/Data/RB_Buffers/BufferedRBs_5km.gpkg'),quiet = TRUE)
+# RBs_B=st_read(paste0(getwd(),'/Data/RB_Buffers/BufferedRBs_1FSR.gpkg'),quiet = TRUE)
+RBs_B=st_read(paste0(getwd(),'/Data/RB_Buffers/BufferedRBs_2FSR.gpkg'),quiet = TRUE)
 
 #Biomass and CV for Reference Areas history
 #2017-2018:
@@ -296,6 +297,9 @@ Links=Disambiguator(Links=Links,
                     RelF=c('season_ccamlr_release','RESEARCH_BLOCK_CODE_RELEASE'),
                     append='Y')
 
+#filter Catch by species
+Catch=Catch[which(Catch$taxon_code%in%c("TOP","TOA")),]
+
 
 #Prep to export for post-processing
 T_Rels=Rels
@@ -303,7 +307,7 @@ T_Recs=Recs
 T_Links=Links
 T_Catch=Catch
 
-#filter by species/RB combo
+#filter Tags by species/RB combo
 #1.Releases
 R_TOP=T_Rels[T_Rels$RESEARCH_BLOCK_CODE%in%TOP_target_RBs & T_Rels$taxon_code=='TOP',] #TOP
 R_TOA=T_Rels[!T_Rels$RESEARCH_BLOCK_CODE%in%TOP_target_RBs & T_Rels$taxon_code=='TOA',] #TOA
@@ -582,7 +586,7 @@ rm(indx)
 
 #taxon_code_release!=taxon_code_recapture
 indx=which(Links$taxon_code_release!=Links$taxon_code_recapture)
-if(length(indx)>0){Links=Links[-indx,]}
+if(length(indx)>0){Links=Links[-indx,];message("-- Change of species code from Release to Recapture --")}
 cat(paste0("taxon_code_release!=taxon_code_recapture: ",length(indx),' records removed'), file = Rcard, sep = "\n")
 rm(indx)
 cat("", file = Rcard, sep = "\n")
@@ -633,3 +637,6 @@ rm(Rcard)
 rm(LW,Recs)
 a=gc()
 rm(a)
+
+
+
