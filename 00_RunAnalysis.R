@@ -7,21 +7,15 @@
 #Timestamp to be added to file names
 Time=Sys.time() 
 Time=format(Time,"%d-%b-%Y")
-Time=paste0(Time,"_V4") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
-#V1: using FishableArea2024 and 5km buffers
-#V2: using FishableArea2025 and 5km buffers
-#V3: using FishableArea2025 and 1FSR buffers
-#V4: using FishableArea2025 and 2FSR buffers
-
-Exclc="883_12" #For V4 exclude them right before CPUE in 02_EstimateBiomass.R (@l.7)
-Excl="5843a_1" #For V4 exclude them right before Chapman in 02_EstimateBiomass.R (@l.158)
-
+Time=paste0(Time,"_V2") #Add suffix to files if desired (e.g. to compare results between GEBCO versions)
+#V1: using FishableArea2025
+#V2: using FishableArea2026
 
 #Get fishable areas 
-RB_seabed_areaM=read.csv('Data/FishableArea2025.csv')
+RB_seabed_areaM=read.csv('Data/FishableArea2026.csv')
 
 #Set Season of estimation
-Est_Season=2025
+Est_Season=2026
 
 #Set biomass and CV for Reference Areas 
 HIMI_biomass_est=23485
@@ -32,6 +26,7 @@ RSR_open_CV_biomass_est=0.057
 #List RBs in the proper order
 RBsToDo=c("481_1","481_2","481_3",
           "482_N","482_S",
+          "483A",
           "486_2","486_3","486_4","486_5",
           "5841_1","5841_2","5841_3","5841_4","5841_5","5841_6",
           "5842_1","5842_2",
@@ -40,10 +35,9 @@ RBsToDo=c("481_1","481_2","481_3",
           "882_1","882_2","882_3","882_4","882H",
           "883_1","883_2","883_3","883_4","883_5","883_6","883_7","883_8","883_9","883_10","883_11","883_12")
 
-
-
 #List RBs that require catch advice (Wait until 1-June when all notifications are up)
 RBsCAdv=c("482_N","482_S",
+          "483A",
           "486_2","486_3","486_4","486_5",
           "5841_1","5841_2","5841_3","5841_4","5841_5","5841_6",
           "5842_1","5842_2",
@@ -55,7 +49,7 @@ n_boot=10000
 
 #Compare to GIS database
 RBcheck=CCAMLRGIS::load_RBs()
-if(all(RBsToDo%in%c(RBcheck$GAR_Short_Label,"882H"))==F){stop("Missing RB in RBsToDo")}
+if(all(RBsToDo%in%c(RBcheck$GAR_Short_Label,"882H","483A"))==F){stop("Missing RB in RBsToDo")}
 rm(RBcheck)
 
 #Set RBs that are TOP target (all other RBS are TOA target)

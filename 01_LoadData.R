@@ -10,10 +10,9 @@ library(dplyr)
 Ref_area_seabed_areaM=RB_seabed_areaM[RB_seabed_areaM$Polys%in%c('RSR_open','HIMI'),]
 #Get spatial objects
 ASDs=load_ASDs()
-RefAreas=st_read(dsn=path.expand(paste0(getwd(),'/Data')), layer="RefAreas", quiet = TRUE)
-# RBs_B=st_read(paste0(getwd(),'/Data/RB_Buffers/BufferedRBs_5km.gpkg'),quiet = TRUE)
-# RBs_B=st_read(paste0(getwd(),'/Data/RB_Buffers/BufferedRBs_1FSR.gpkg'),quiet = TRUE)
-RBs_B=st_read(paste0(getwd(),'/Data/RB_Buffers/BufferedRBs_2FSR.gpkg'),quiet = TRUE)
+# RefAreas=st_read(dsn=path.expand(paste0(getwd(),'/Data')), layer="RefAreas", quiet = TRUE)
+RefAreas=st_read(paste0(getwd(),'/Data/RefAreas.gpkg'),quiet = TRUE)
+RBs_B=st_read(paste0(getwd(),'/Data/BufferedRBs.gpkg'),quiet = TRUE)
 
 #Biomass and CV for Reference Areas history
 #2017-2018:
@@ -101,6 +100,7 @@ C2=C2%>%filter(!is.na(obs_haul_id))
 LW=LL$OBS_HAUL_BIOLOGY
 LW=LW%>%filter(!is.na(obs_haul_id))
 LW=LW%>%filter(taxon_code%in%c("TOP","TOA"))
+LW=LW%>%filter(greenweight_kg>0)
 LW=inner_join(C2,LW,by="obs_haul_id",multiple = "all")
 LW=dplyr::rename(LW, obs_logbook_id = obs_logbook_id.y)
 LW=dplyr::rename(LW, haul_number = haul_number.y)

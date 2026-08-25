@@ -683,6 +683,7 @@ for(i in seq(1,nrow(Mi_out_Em))){
   tmp=cbind(tmp,Mi_out_Em[i,])
   Ar_Em=rbind(Ar_Em,tmp)
 }
+
 Ar_Mig=NULL
 for(i in seq(1,nrow(Mi_in))){
   asz=Mi_in$n[i]
@@ -711,7 +712,15 @@ for(i in seq(1,nrow(Mi_in))){
 }
 
 #Merge arrows that have the same starting point
-if(length(unique(Ar_Im$OutRel))!=nrow(Ar_Im)){stop("Merge Ar_Im arrows")}
+if(length(unique(Ar_Im$OutRel))!=nrow(Ar_Im)){
+  Ar_Im=Ar_Im%>%group_by(OutRel)%>%summarise(
+    col=unique(col),
+    border=unique(border),  
+    n=sum(n),
+    geometry=st_union(geometry),
+    .groups="drop"
+  )
+}
 if(length(unique(Ar_Em$RBRel))!=nrow(Ar_Em)){
   Ar_Em=Ar_Em%>%group_by(RBRel)%>%summarise(
     col=unique(col),

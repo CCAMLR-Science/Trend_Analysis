@@ -3,12 +3,6 @@ cat("CPUE start", sep = "\n")
 
 #G. Estimate Biomass using CPUE####
 
-#EXCLUDE RBs for V4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-Research_blocks=Research_blocks[-which(Research_blocks%in%Exclc)]
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
 store_biomass_estimate=NULL
 for (RB in Research_blocks){
   cat(RB);cat(" | ")
@@ -151,10 +145,6 @@ cat("\n")
 
 # find Research blocks with at least one recapture in any survey year
 Research_blocks=unique(Links$RESEARCH_BLOCK_CODE_RECAPTURE)
-
-#EXCLUDE RBs for V4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-Research_blocks=Research_blocks[-which(Research_blocks%in%Excl)]
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 store_biomass_estimate_chapman=NULL
