@@ -44,12 +44,12 @@ for(a in sort(unique(CPUE_est$Area))){
   
   
   #Thumbnail
-  plot(NA,NA,xlim=c(0,10),ylim=c(0,10),axes=F,xlab='',ylab='')
+  plot(NA,NA,xlim=c(1,9),ylim=c(1,9),axes=F,xlab='',ylab='',xaxs="i",yaxs="i",asp=1)
   inset=png::readPNG(paste0("Data/Area",a,".png"),native = T)
   rasterImage(inset,xleft=0,
-              ybottom=-1,
+              ybottom=0,
               xright=10,
-              ytop=11,
+              ytop=10,
               xpd=T)
   
   #Legend

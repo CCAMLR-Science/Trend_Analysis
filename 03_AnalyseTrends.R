@@ -133,7 +133,7 @@ par(mai=c(0.3,0.4,0.4,0.35),cex.axis=1.5)
 XL=c(Est_Season-4,Est_Season+0.75)
 
 #Thumbnail
-plot(NA,NA,xlim=c(0,10),ylim=c(0,10),axes=F,xlab='',ylab='')
+plot(NA,NA,xlim=c(1,9),ylim=c(1,9),axes=F,xlab='',ylab='',xaxs="i",yaxs="i",asp=1)
 inset=png::readPNG(paste0("Data/Area",a,".png"),native = T)
 rasterImage(inset,xleft=0,
             ybottom=0,
