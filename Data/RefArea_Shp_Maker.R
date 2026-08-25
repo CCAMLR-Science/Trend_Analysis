@@ -3,16 +3,18 @@ library(CCAMLRGIS)
 library(dplyr)
 
 #Load CCAMLR Areas
-ASDs=load_ASDs()
-EEZs=load_EEZs()
-MAs=load_MAs()
-MPAs=load_MPAs()
+Url="https://github.com/ccamlr/geospatial_operations/raw/10c7ee8d3960e22a7dd79c0663c38979c074fb38/Dataset/GeoPackages/"
+  
+ASDs=st_read(paste0(Url,"CCAMLR_ASD.gpkg"),quiet=T)
+EEZs=st_read(paste0(Url,"CCAMLR_EEZ.gpkg"),quiet=T)
+MAs=st_read(paste0(Url,"CCAMLR_MA.gpkg"),quiet=T)
+MPAs=st_read(paste0(Url,"CCAMLR_MPA.gpkg"),quiet=T)
 
 #1. RefArea HIMI (HIMI EEZ within 58.5.2)
 #Take HIMI EEZ
-HIMI=EEZs[EEZs$GAR_Short_Label=="HIMI",]
+HIMI=EEZs[EEZs$ID=="HIMI",]
 #Take Division 58.5.2
-D5852=ASDs[ASDs$GAR_Short_Label=="5852",]
+D5852=ASDs[ASDs$ID=="58.5.2",]
 #Remove area outside 58.5.2 from HIMI EEZ
 HIMI=suppressWarnings( st_intersection(HIMI,D5852) )
 #Add name to polygon
@@ -22,8 +24,8 @@ HIMI=HIMI%>%select(name)
 
 #2. RefArea RSR_open (S70 + N70 + SRZ)
 #Merge SRZ, N70 and S70
-RSR_open=suppressWarnings(st_union(MPAs[MPAs$GAR_Short_Label=='SRZ',],MAs[MAs$GAR_Short_Label=='S70',]))
-RSR_open=suppressWarnings(st_union(RSR_open,MAs[MAs$GAR_Short_Label=='N70',]))
+RSR_open=suppressWarnings(st_union(MPAs[MPAs$ID=='SRZ',],MAs[MAs$ID=='S70',]))
+RSR_open=suppressWarnings(st_union(RSR_open,MAs[MAs$ID=='N70',]))
 
 #Add name to polygon
 RSR_open$name="RSR_open"
@@ -33,7 +35,7 @@ RSR_open=RSR_open%>%select(name)
 RefAreas=rbind(RSR_open,HIMI)
 
 #4. Export
-st_write(RefAreas, "Data/RefAreas.shp",append = F,quiet = T)
+st_write(RefAreas,"Data/RefAreas.gpkg",quiet=T,append=F,delete_dsn=T)
 
 
 
@@ -75,5 +77,5 @@ RefAreasLL=st_transform(RefAreas_tmp,crs=4326)
 plot(st_geometry(RefAreasLL),col=rainbow(3))
 
 #Export
-st_write(RefAreasLL, "Data/RefAreasLL.shp",append = F,quiet = T)
+st_write(RefAreasLL,"Data/RefAreasLL.gpkg",quiet=T,append=F,delete_dsn=T)
 

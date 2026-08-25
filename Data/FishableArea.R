@@ -3,23 +3,15 @@ library(CCAMLRGIS)
 library(terra) 
 library(dplyr)
 
-#Load research blocks
-RBs=load_RBs()
-#Load SSRUs (to get 882H)
-SSRUs=load_SSRUs()
-SSRUs=SSRUs[SSRUs$GAR_Short_Label=='882H',]
-#simplify RBs and SSRUs and merge
-RBs=RBs%>%select(name=GAR_Short_Label)
-SSRUs=SSRUs%>%select(name=GAR_Short_Label)
-#Bind
-Polys=rbind(RBs,SSRUs)
+#Load research blocks, as prepared in BufferRBs.R > Use non-buffered RBs (WG-SAM-2026 paragraph 6.39)
+Polys=st_read("Data/RBs.gpkg",quiet=T)
 
 #back-Project Polys to Latitudes/Longitudes
 PolysLL=st_transform(Polys,crs=4326)
 
-
 #Load reference areas (created in RefArea_Shp_Maker.R)
-RefAreas=st_read(dsn=path.expand(paste0(getwd(),'/Data')), layer="RefAreasLL", quiet = TRUE)
+RefAreas=st_read("Data/RefAreasLL.gpkg",quiet=T)
+
 
 #Add RefAreas to PolysLL
 PolysLL=rbind(PolysLL,RefAreas)
@@ -29,7 +21,7 @@ PolysLL=rbind(PolysLL,RefAreas)
 
 
 #Get the unprojected GEBCO data
-B=rast("I:/Science/Projects/GEBCO/2025/Processed/GEBCO2025_LL.tif")
+B=rast("I:/Science/Projects/GEBCO/2026/Processed/GEBCO2026_LL.tif")
 #Convert Polys to Spatvector for the terra package
 PolysLLsv=vect(PolysLL)
 #Loop over polygons that are inside PolysLLsv
@@ -61,4 +53,4 @@ RawAr=rbind(RawAr,data.frame(
 RawAr=RawAr[-which(RawAr$Poly%in%c("RSR_open_East","RSR_open_West")),]
 colnames(RawAr)=c("Polys","Fishable_area")
 #Export
-write.csv(RawAr,'Data/FishableArea2025.csv',row.names = F)
+write.csv(RawAr,'Data/FishableArea2026.csv',row.names = F)

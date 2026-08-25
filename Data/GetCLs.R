@@ -4,7 +4,7 @@ library(dplyr)
 library(stringr)
 
 #Set season, then run NB: add RBs in "CLs.csv" if new ones have been created
-Season = 2025
+Season = 2026
 
 
 
@@ -14,29 +14,23 @@ CLs=read.csv("Data/CLs.csv",check.names = F)
 
 
 #Temp FIX for 483A !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-CLs=rbind(CLs,c("483A",c(0,0,0,NA,NA,NA,NA)))
-
-
-
-
-
+# CLs=rbind(CLs,c("483A",c(0,0,0,NA,NA,NA,NA)))
 
 
 Catch_limits = ccamlrtools::queryccamlr(
-  paste0(" SELECT distinct 	  
-                  dfa_name as 'RB',
-              	  tg.taxon_group_cd as 'Taxon Group',
-                  [DFL_Target_Bycatch] as 'Target Bycatch',
-                  [DFL_Catch_Limit] as 'Catch limit'
-                  FROM [cdb].[dbo].[DIRECTED_FISHING_CATCH_LIMIT] DFCL
-                  inner join [DIRECTED_FISHING_AREA_COMPOSITION] DFAC on DFAC.DFA_ID = DFCL.DFA_ID
-                  inner join GEOGRAPHICAL_AREA GAR on GAR.GAR_ID = DFAC.GAR_ID
-                  inner join  [DIRECTED_FISHING_AREA] DFA_FLAT on DFA_FLAT.DFA_ID = DFCL.DFA_ID
-                  inner join [CCAMLR].[dbo].[FISHERY_SEASONAL_REGULATION] FSR on FSR.FSR_ID = DFA_FLAT.FSR_ID
-                  inner join CCAMLR.dbo.[CCAMLR_SEASON] on [CCAMLR_SEASON].CSN_ID = FSR.CSN_ID
-                  inner join [ANTARCTICA].[dbo].[TAXON_GROUP] tg on tg.taxon_group_legacy_cd = TGR_ID
-                  where [CSN_Code] =  " , Season , " and (dfa_name like 'Research%' or DFA_Name like 'SSRU%')
-                          "), db = "cdb")
+  paste0(" SELECT distinct dfa_name as 'RB',
+               	  tg.taxon_group_cd as 'Taxon Group',
+                   [DFL_Target_Bycatch] as 'Target Bycatch',
+                   [DFL_Catch_Limit] as 'Catch limit'
+                   FROM [cdb].[dbo].[DIRECTED_FISHING_CATCH_LIMIT] DFCL
+                   inner join [DIRECTED_FISHING_AREA_COMPOSITION] DFAC on DFAC.DFA_ID = DFCL.DFA_ID
+                   inner join GEOGRAPHICAL_AREA GAR on GAR.GAR_ID = DFAC.GAR_ID
+                   inner join  [DIRECTED_FISHING_AREA] DFA_FLAT on DFA_FLAT.DFA_ID = DFCL.DFA_ID
+                   inner join [CCAMLR].[dbo].[FISHERY_SEASONAL_REGULATION] FSR on FSR.FSR_ID = DFA_FLAT.FSR_ID
+                   inner join CCAMLR.dbo.[CCAMLR_SEASON] on [CCAMLR_SEASON].CSN_ID = FSR.CSN_ID
+                   inner join [ANTARCTICA].[dbo].[TAXON_GROUP] tg on tg.taxon_group_legacy_cd = TGR_ID
+                   where [CSN_Code] =  " , Season , " and (dfa_name like 'Research%' or DFA_Name like 'SSRU%')
+                           "), db = "cdb")
 
 
 Catch_limits=Catch_limits%>%filter(`Target Bycatch`=="Target")

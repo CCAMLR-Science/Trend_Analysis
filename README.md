@@ -3,9 +3,10 @@
 
 # Trend analysis
 
-Latest reports:
-[WG-SAM-2024/12](https://meetings.ccamlr.org/en/wg-sam-2024/12) and
-[WG-FSA-IMAF-2024/12](https://meetings.ccamlr.org/en/wg-fsa-imaf-2024/12).
+Previous reports are listed
+[here](https://github.com/CCAMLR-Science/Trend_Analysis/blob/main/Data/Previous_Reports_TrendAnalysis.csv)
+
+Keep that table up to date.
 
 ## Annual updates
 
@@ -19,7 +20,7 @@ to be reviewed, others might need updating.
 
 1.  Review/update the shapefile of buffered Research Blocks.
 
-In the subfolder *~/Data*, the shapefile “BufferedRBs” contains the RBs
+In the subfolder *~/Data*, the geopackage “BufferedRBs” contains the RBs
 after buffering (+5km). It is generated using *BufferRBs.R* which also
 produces a plot (“BufferedRBs.png”) to look at the buffers, which get a
 bit special when RBs have shared boundaries (shown in blue/orange on the
