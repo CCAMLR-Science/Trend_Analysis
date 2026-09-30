@@ -163,3 +163,51 @@ for(a in sort(unique(CPUE_est$Area))){
 
 
 
+
+#Build Overall table
+TAtab=CPUE_est%>%select(Area,RB,Species,Season,CL,CPUE_B=Est)
+#Missing: ASD, Catch, Tags rel, Tags rec, ChapmanEst
+
+#Add catch and tags
+Catch=read.csv(paste0("Output_All_Catch_",Time,".csv"))
+Rels=read.csv(paste0("Output_All_Releases_",Time,".csv")) 
+Recs=read.csv(paste0("Output_All_Recaptures_",Time,".csv")) 
+
+#Summarise to per-season-RB
+CatchS=Catch%>%group_by(Season=season_ccamlr,RB=RESEARCH_BLOCK_CODE_START_SET,Species=taxon_code)%>%summarise(C=sum(greenweight_caught_kg,na.rm=T)/1000,.groups = 'drop')
+RelS=Rels%>%group_by(Season=season_ccamlr,RB=RESEARCH_BLOCK_CODE,Species=taxon_code)%>%summarise(nrel=n(),.groups = 'drop')
+RecS=Recs%>%group_by(Season=season_ccamlr,RB=RESEARCH_BLOCK_CODE,Species=taxon_code)%>%summarise(nrec=n(),.groups = 'drop')
+
+#Join
+TAtab=left_join(TAtab,CatchS,by=c("Season","RB","Species"))
+TAtab=left_join(TAtab,RelS,by=c("Season","RB","Species"))
+TAtab=left_join(TAtab,RecS,by=c("Season","RB","Species"))
+
+#Get Chapman estimates
+Chap=read.csv(paste0("Output_Chapman_",Time,".csv")) 
+Chap=Chap%>%select(Species,RB,Season,Chap_B=Est)
+TAtab=left_join(TAtab,Chap,by=c("Season","RB","Species"))
+
+#Add ASD
+TAtab$ASD=NA
+TAtab$ASD[which(TAtab$RB%in%c("486_2","486_3","486_4","486_5"))]="48.6"
+TAtab$ASD[which(TAtab$RB%in%c("5841_2","5841_3","5841_5"))]="58.4.1"
+TAtab$ASD[which(TAtab$RB%in%c("5842_1","5842_2"))]="58.4.2"
+TAtab$ASD[which(TAtab$RB%in%c("882_1","882_2","882_3","882_4","882H"))]="88.2"
+TAtab$ASD[which(TAtab$RB%in%c("883_1","883_3","883_4","883_6","883_7"))]="88.3"
+
+if(any(is.na(TAtab$ASD))){stop("Missing ASD assignment in TAtab in script 06 :(")}
+
+#Keep last 6 seasons
+TAtab=TAtab%>%filter(Season>=max(Season-5))
+#Round tonnes
+TAtab$C=round(TAtab$C,1)
+TAtab$CPUE_B=round(TAtab$CPUE_B)
+TAtab$Chap_B=round(TAtab$Chap_B)
+
+
+#Cleanup and export
+TAtab=TAtab%>%select(Area,'Subarea or Division'=ASD,'Research Block'=RB,Species,Season,
+                     'Catch limit (t.)'=CL,'Catch (t.)'=C,'Tags released'=nrel,
+                     'Tags recaptured'=nrec,'CPUE Biomass (t.)'=CPUE_B,'Chapman Biomass (t.)'=Chap_B)
+write.csv(TAtab,paste0("TA_Full_Table_",Time,".csv"),row.names = F)

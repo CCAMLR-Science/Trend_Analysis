@@ -287,7 +287,8 @@ Catch=Catch%>%select(
   season_ccamlr,
   obs_haul_id,
   depth_gear_set_start_m,
-  depth_gear_set_end_m
+  depth_gear_set_end_m,
+  longline_type
 )
 
 
