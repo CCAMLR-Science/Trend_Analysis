@@ -208,6 +208,6 @@ TAtab$Chap_B=round(TAtab$Chap_B)
 
 #Cleanup and export
 TAtab=TAtab%>%select(Area,'Subarea or Division'=ASD,'Research Block'=RB,Species,Season,
-                     'Catch limit (t.)'=CL,'Catch (t.)'=C,'Tags released'=nrel,
-                     'Tags recaptured'=nrec,'CPUE Biomass (t.)'=CPUE_B,'Chapman Biomass (t.)'=Chap_B)
+                     'Catch limit (t.)'=CL,'Catch (t.)'=C,'Fish released'=nrel,
+                     'Fish recaptured'=nrec,'CPUE Biomass (t.)'=CPUE_B,'Chapman Biomass (t.)'=Chap_B)
 write.csv(TAtab,paste0("TA_Full_Table_",Time,".csv"),row.names = F)
